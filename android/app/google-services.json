@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "297870454446",
+    "project_id": "vchat-76d66",
+    "storage_bucket": "vchat-76d66.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297870454446:android:d89b892688cedcaedc873f",
+        "android_client_info": {
+          "package_name": "com.vignesh.vchat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV2TZFl6XY9z3wrAPP7VDod0MipM54ZAI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

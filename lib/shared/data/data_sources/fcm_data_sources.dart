@@ -16,7 +16,7 @@ class FcmDataSourceImpl implements FcmDataSource {
   @override
   Future<Either<Failure, void>> saveToken({required String token}) async {
     try {
-      await apiService.put(route: AppUrls.fcmToken, data: {'token': token});
+      await apiService.post(route: AppUrls.fcmToken, data: {'token': token});
       return const Right(null);
     } catch (e) {
       return Left(Failure(message: e.toString()));

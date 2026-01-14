@@ -18,16 +18,29 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   await dotenv.load(fileName: ".env");
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const VigneshProject01());
+}
+
+class VigneshProject01 extends StatefulWidget {
+  const VigneshProject01({super.key});
+
+  @override
+  State<VigneshProject01> createState() => _VigneshProject01State();
+}
+
+class _VigneshProject01State extends State<VigneshProject01> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await locator<StorageService>().initialize();
   await locator<PushNotificationService>().initialize();
   locator<SocketService>().connect();
-  runApp(const VigneshProject01());
-}
-
-class VigneshProject01 extends StatelessWidget {
-  const VigneshProject01({super.key});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

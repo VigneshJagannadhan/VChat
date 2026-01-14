@@ -15,7 +15,6 @@ import 'package:vignesh_project_01/features/user/presentation/views/user_list_vi
 import 'package:vignesh_project_01/features/user/presentation/views/user_profile_view.dart';
 import 'package:vignesh_project_01/shared/others/snackbars/general_snackbar.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/custom_error_widget.dart';
-import 'package:vk_custom_widgets/vk_custom_widgets.dart';
 
 class ChatListView extends StatefulWidget {
   static const String route = '/home_view';

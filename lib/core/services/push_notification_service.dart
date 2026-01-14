@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _fcm;
@@ -55,20 +56,38 @@ class PushNotificationService {
   /* -------------------------------------------------------------------------- */
 
   Future<void> _requestPermission() async {
+    // On Android 13+ we must request the runtime POST_NOTIFICATIONS permission.
+    if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
+      final status = await Permission.notification.request();
+      log('Android notification permission: $status');
+    }
+
+    // For iOS (and to get fine-grained authorization info) also request via FCM API.
     final settings = await _fcm.requestPermission(
       alert: true,
       badge: true,
       sound: true,
     );
 
-    log('Notification permission: ${settings.authorizationStatus}');
+    log('Notification permission (FCM): ${settings.authorizationStatus}');
   }
 
   Future<void> _initializeLocalNotifications() async {
-    const androidSettings = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
-    );
+    // Create Android notification channel for Android 8+.
+    if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
+      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'high_importance_channel',
+        'High Importance Notifications',
+        description: 'This channel is used for important notifications.',
+        importance: Importance.max,
+      );
 
+      final androidPlugin = _localNotifications
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      await androidPlugin?.createNotificationChannel(channel);
+    }
+
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings();
 
     const initializationSettings = InitializationSettings(

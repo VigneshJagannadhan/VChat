@@ -21,7 +21,7 @@ class _AuthViewState extends State<AuthView> {
     text: 'user',
   );
   final TextEditingController _emailController = TextEditingController(
-    text: 'user@gmail.com',
+    text: 'alicedoe@gmail.com',
   );
   final TextEditingController _passwordController = TextEditingController(
     text: 'Abcd@1234',

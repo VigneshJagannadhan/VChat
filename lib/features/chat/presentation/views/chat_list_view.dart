@@ -14,6 +14,8 @@ import 'package:vignesh_project_01/features/chat/presentation/views/test.dart';
 import 'package:vignesh_project_01/features/user/presentation/views/user_list_view.dart';
 import 'package:vignesh_project_01/features/user/presentation/views/user_profile_view.dart';
 import 'package:vignesh_project_01/shared/others/snackbars/general_snackbar.dart';
+import 'package:vignesh_project_01/shared/presentation/cubits/update/update_cubit.dart';
+import 'package:vignesh_project_01/shared/presentation/cubits/update/update_states.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/custom_error_widget.dart';
 
 class ChatListView extends StatefulWidget {
@@ -34,7 +36,10 @@ class _ChatListViewState extends State<ChatListView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((v) async {
       chatProvider = context.read<ChatCubit>();
+      UpdateCubit updateCubit = context.read<UpdateCubit>();
+
       await chatProvider?.getChatList();
+       updateCubit.checkForUpdate(); 
     });
   }
 
@@ -47,7 +52,45 @@ class _ChatListViewState extends State<ChatListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<UpdateCubit, UpdateStates>(
+      listener: (context, state) {
+        if (state is UpdateLoaded && state.isUpdateAvailable) {
+          var isOptionalUpdate = !(state.updateEntity.forceUpdate ?? false);
+
+          showDialog(
+            context: context,
+            barrierDismissible: isOptionalUpdate,
+            builder: (context) {
+              return PopScope(
+                onPopInvokedWithResult:(didPop, result) => isOptionalUpdate,
+                child: AlertDialog(
+                  title: Text('Update Available', style: AppStyles.ts20W400cBlack),
+                  content: Text(
+                    state.updateEntity.updateMessage ?? 'A new version of the app is available. Please update to continue.',
+                    style: AppStyles.ts14W400cBlack,
+                  ),
+                  actions: [
+                    if (isOptionalUpdate)
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Update Later', style: AppStyles.ts16W400cPrimary),
+                      ),
+                    TextButton(
+                      onPressed: () {
+                        
+                          Navigator.of(context).pop();
+                      },
+                      child: Text(isOptionalUpdate ? 'Update Now' : 'Update to continue', style: AppStyles.ts16W400cPrimary),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }
+      }, child : Scaffold(
       appBar: AppBar(
         title: const Text('VChat'),
         actions: [
@@ -160,6 +203,6 @@ class _ChatListViewState extends State<ChatListView> {
         onPressed: () => Navigator.pushNamed(context, UserListView.route),
         child: Icon(Icons.message_outlined, color: Colors.white),
       ),
-    );
+    ));
   }
 }

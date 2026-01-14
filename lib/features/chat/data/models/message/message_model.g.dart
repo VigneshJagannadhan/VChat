@@ -7,14 +7,22 @@ part of 'message_model.dart';
 // **************************************************************************
 
 MessageModel _$MessageModelFromJson(Map<String, dynamic> json) => MessageModel(
-  id: json['_id'] as String,
-  sender: UserModel.fromJson(json['sender'] as Map<String, dynamic>),
-  content: json['content'] as String,
-  chat: ChatModel.fromJson(json['chat'] as Map<String, dynamic>),
-  readBy: (json['readBy'] as List<dynamic>).map((e) => e as String).toList(),
-  createdAt: DateTime.parse(json['createdAt'] as String),
-  updatedAt: DateTime.parse(json['updatedAt'] as String),
-  version: (json['__v'] as num).toInt(),
+  id: json['_id'] as String?,
+  sender: json['sender'] == null
+      ? null
+      : UserModel.fromJson(json['sender'] as Map<String, dynamic>),
+  content: json['content'] as String?,
+  chat: json['chat'] == null
+      ? null
+      : ChatModel.fromJson(json['chat'] as Map<String, dynamic>),
+  readBy: (json['readBy'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  createdAt: json['createdAt'] == null
+      ? null
+      : DateTime.parse(json['createdAt'] as String),
+  updatedAt: json['updatedAt'] == null
+      ? null
+      : DateTime.parse(json['updatedAt'] as String),
+  version: (json['__v'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$MessageModelToJson(MessageModel instance) =>

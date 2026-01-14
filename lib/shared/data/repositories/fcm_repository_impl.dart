@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
-import 'package:vignesh_project_01/shared/data/data_sources/fcm_data_sources.dart';
+import 'package:vignesh_project_01/shared/data/data_sources/fcm_data_source.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/fcm_repository.dart';
 
 class FcmRepositoryImpl extends FcmRepository {

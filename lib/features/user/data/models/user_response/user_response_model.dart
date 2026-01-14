@@ -13,7 +13,7 @@ class UserListResponseModel {
   UserListResponseModel({this.users, this.page, this.pages, this.total});
 
   factory UserListResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$UserResponseModelFromJson(json);
+      _$UserListResponseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserResponseModelToJson(this);
+  Map<String, dynamic> toJson() => _$UserListResponseModelToJson(this);
 }

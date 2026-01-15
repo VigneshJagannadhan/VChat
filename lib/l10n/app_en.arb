@@ -1,0 +1,36 @@
+{
+  "@@locale": "en",
+  
+  "appTitle": "VChat",
+  "appName": "VChat",
+  
+  "chatListTitle": "VChat",
+  "searchLabel": "Search",
+  "noChatMessage": "No Chats",
+  "sendMessagePlaceholder": "Send a message to get started!",
+  
+  "userProfileTitle": "User Profile",
+  "userListTitle": "User List",
+  "searchUserLabel": "Search user",
+  "noUsersFound": "No users found",
+  "noUsers": "No Users",
+  "nameLabel": "Name",
+  "emailLabel": "Email",
+  "saveButtonLabel": "Save",
+  "logoutButtonLabel": "Logout",
+  "retryButtonLabel": "Retry",
+  
+  "updateAvailableTitle": "Update Available",
+  "updateLaterButtonLabel": "Update Later",
+  "updateNowButtonLabel": "Update Now",
+  "updateToContinueButtonLabel": "Update to continue",
+  "defaultUpdateMessage": "A new version of the app is available. Please update to continue.",
+  
+  "confirmDialogTitle": "Confirm",
+  "okButtonLabel": "OK",
+  "cancelButtonLabel": "Cancel",
+  "generalErrorMessage": "Something went wrong!",
+  "networkErrorMessage": "Network error. Please try again",
+  
+  "settingsButtonTooltip": "Settings"
+}

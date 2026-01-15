@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:vignesh_project_01/features/chat/presentation/views/chat_view.da
 import 'package:vignesh_project_01/features/chat/presentation/views/test.dart';
 import 'package:vignesh_project_01/features/user/presentation/views/user_list_view.dart';
 import 'package:vignesh_project_01/features/user/presentation/views/user_profile_view.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
 import 'package:vignesh_project_01/shared/others/snackbars/general_snackbar.dart';
 import 'package:vignesh_project_01/shared/presentation/cubits/update/update_cubit.dart';
 import 'package:vignesh_project_01/shared/presentation/cubits/update/update_states.dart';
@@ -39,7 +41,7 @@ class _ChatListViewState extends State<ChatListView> {
       UpdateCubit updateCubit = context.read<UpdateCubit>();
 
       await chatProvider?.getChatList();
-       updateCubit.checkForUpdate(); 
+      updateCubit.checkForUpdate();
     });
   }
 
@@ -62,11 +64,15 @@ class _ChatListViewState extends State<ChatListView> {
             barrierDismissible: isOptionalUpdate,
             builder: (context) {
               return PopScope(
-                onPopInvokedWithResult:(didPop, result) => isOptionalUpdate,
+                onPopInvokedWithResult: (didPop, result) => isOptionalUpdate,
                 child: AlertDialog(
-                  title: Text('Update Available', style: AppStyles.ts20W400cBlack),
+                  title: Text(
+                    AppLocalizations.of(context)!.updateAvailableTitle,
+                    style: AppStyles.ts20W400cBlack,
+                  ),
                   content: Text(
-                    state.updateEntity.updateMessage ?? 'A new version of the app is available. Please update to continue.',
+                    state.updateEntity.updateMessage ??
+                        AppLocalizations.of(context)!.defaultUpdateMessage,
                     style: AppStyles.ts14W400cBlack,
                   ),
                   actions: [
@@ -75,14 +81,23 @@ class _ChatListViewState extends State<ChatListView> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text('Update Later', style: AppStyles.ts16W400cPrimary),
+                        child: Text(
+                          AppLocalizations.of(context)!.updateLaterButtonLabel,
+                          style: AppStyles.ts16W400cPrimary,
+                        ),
                       ),
                     TextButton(
                       onPressed: () {
-                        
-                          Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       },
-                      child: Text(isOptionalUpdate ? 'Update Now' : 'Update to continue', style: AppStyles.ts16W400cPrimary),
+                      child: Text(
+                        isOptionalUpdate
+                            ? AppLocalizations.of(context)!.updateNowButtonLabel
+                            : AppLocalizations.of(
+                                context,
+                              )!.updateToContinueButtonLabel,
+                        style: AppStyles.ts16W400cPrimary,
+                      ),
                     ),
                   ],
                 ),
@@ -90,119 +105,126 @@ class _ChatListViewState extends State<ChatListView> {
             },
           );
         }
-      }, child : Scaffold(
-      appBar: AppBar(
-        title: const Text('VChat'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () =>
-                Navigator.of(context).pushNamed(UserProfileView.route),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 20.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: AkTextFormField(
-              controller: _searchController,
-              label: "Search",
-              onChanged: (value) {
-                if (_debounce?.isActive ?? false) _debounce?.cancel();
-                _debounce = Timer(const Duration(milliseconds: 500), () {
-                  chatProvider?.getChatList(search: value);
-                });
-              },
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.appTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(UserProfileView.route),
             ),
-          ),
-          SizedBox(height: 20.h),
-          BlocConsumer<ChatCubit, ChatListState>(
-            listener: (context, state) {
-              if (state is ChatListFailure) {
-                showGeneralSnackbar(
-                  context: context,
-                  errorMessage: state.failure.message,
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state is ChatListFailure) {
-                return CustomErrorWidget(
-                  message: state.failure.message,
-                  onRetry: () => context.read<ChatCubit>().getChatList(),
-                );
-              }
-              if (state is ChatListLoading) {
-                return const Expanded(
-                  child: Center(child: CupertinoActivityIndicator()),
-                );
-              }
+          ],
+        ),
+        body: Column(
+          children: [
+            SizedBox(height: 20.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: AkTextFormField(
+                controller: _searchController,
+                label: AppLocalizations.of(context)!.searchLabel,
+                onChanged: (value) {
+                  if (_debounce?.isActive ?? false) _debounce?.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 500), () {
+                    chatProvider?.getChatList(search: value);
+                  });
+                },
+              ),
+            ),
+            SizedBox(height: 20.h),
+            BlocConsumer<ChatCubit, ChatListState>(
+              listener: (context, state) {
+                if (state is ChatListFailure) {
+                  showGeneralSnackbar(
+                    context: context,
+                    errorMessage: state.failure.message,
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state is ChatListFailure) {
+                  return CustomErrorWidget(
+                    message: state.failure.message,
+                    onRetry: () => context.read<ChatCubit>().getChatList(),
+                  );
+                }
+                if (state is ChatListLoading) {
+                  return const Expanded(
+                    child: Center(child: CupertinoActivityIndicator()),
+                  );
+                }
 
-              if (state is ChatListLoaded) {
-                if (state.chats.isEmpty) {
+                if (state is ChatListLoaded) {
+                  if (state.chats.isEmpty) {
+                    return Expanded(
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.noChatMessage,
+                          style: AppStyles.ts12W400cBlack,
+                        ),
+                      ),
+                    );
+                  }
+
                   return Expanded(
-                    child: Center(
-                      child: Text('No Chats', style: AppStyles.ts12W400cBlack),
+                    child: ListView.separated(
+                      itemCount: state.chats.length,
+                      separatorBuilder: (context, index) =>
+                          Divider(height: 0.5.h, thickness: 0.5.h),
+                      itemBuilder: (_, index) {
+                        final chat = state.chats[index];
+                        final username = chat.participant?.username ?? '';
+                        final time =
+                            chat.lastMessage?.createdAt?.messageFormat() ?? '';
+
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 5.w,
+                            ),
+                            leading: Stack(
+                              children: [
+                                CircleAvatar(radius: 20.r),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.green,
+                                    radius: 5.r,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            title: Text(username.toUpperCase()),
+                            subtitle: Text(chat.lastMessage?.content ?? ''),
+                            trailing: Text(time),
+                            onTap: () => Navigator.of(context).pushNamed(
+                              ChatView.route,
+                              arguments: ChatDetailViewArgs(chatId: chat.id),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 }
 
-                return Expanded(
-                  child: ListView.separated(
-                    itemCount: state.chats.length,
-                    separatorBuilder: (context, index) =>
-                        Divider(height: 0.5.h, thickness: 0.5.h),
-                    itemBuilder: (_, index) {
-                      final chat = state.chats[index];
-                      final username = chat.participant?.username ?? '';
-                      final time =
-                          chat.lastMessage?.createdAt?.messageFormat() ?? '';
+                return const SizedBox.shrink();
+              },
+            ),
+          ],
+        ),
 
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 5.w),
-                          leading: Stack(
-                            children: [
-                              CircleAvatar(radius: 20.r),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.green,
-                                  radius: 5.r,
-                                ),
-                              ),
-                            ],
-                          ),
-                          title: Text(username.toUpperCase()),
-                          subtitle: Text(chat.lastMessage?.content ?? ''),
-                          trailing: Text(time),
-                          onTap: () => Navigator.of(context).pushNamed(
-                            ChatView.route,
-                            arguments: ChatDetailViewArgs(chatId: chat.id),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.primaryColor,
 
-              return const SizedBox.shrink();
-            },
-          ),
-        ],
+          onPressed: () => Navigator.pushNamed(context, UserListView.route),
+          child: Icon(Icons.message_outlined, color: Colors.white),
+        ),
       ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryColor,
-
-        onPressed: () => Navigator.pushNamed(context, UserListView.route),
-        child: Icon(Icons.message_outlined, color: Colors.white),
-      ),
-    ));
+    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
 import 'package:vignesh_project_01/core/themes/app_colors.dart';
 import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/primary_button.dart';
 
 Future<bool?> showGeneralPopup({
@@ -27,7 +28,10 @@ Future<bool?> showGeneralPopup({
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: 10.h),
-            Text(title ?? 'Confirm', style: AppStyles.ts20W400cBlack),
+            Text(
+              title ?? AppLocalizations.of(context)!.confirmDialogTitle,
+              style: AppStyles.ts20W400cBlack,
+            ),
             SizedBox(height: 20.h),
             Lottie.asset(AppConstants.lottieError, height: 100.h),
             SizedBox(height: 20.h),
@@ -39,14 +43,17 @@ Future<bool?> showGeneralPopup({
             SizedBox(height: 20.h),
             PrimaryButton(
               onTap: () => Navigator.of(context).pop(true),
-              label: confirmLabel ?? 'OK',
+              label:
+                  confirmLabel ?? AppLocalizations.of(context)!.okButtonLabel,
               color: AppColors.primaryColor,
             ),
             if (!singleButton) SizedBox(height: 10.h),
             if (!singleButton)
               PrimaryButton(
                 onTap: () => Navigator.of(context).pop(false),
-                label: cancelLabel ?? 'Cancel',
+                label:
+                    cancelLabel ??
+                    AppLocalizations.of(context)!.cancelButtonLabel,
                 color: Colors.red,
               ),
           ],

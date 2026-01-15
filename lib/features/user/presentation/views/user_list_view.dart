@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:vignesh_project_01/features/chat/presentation/views/chat_view.da
 import 'package:vignesh_project_01/features/user/data/models/user/user_model.dart';
 import 'package:vignesh_project_01/features/user/presentation/cubits/user_list/user_list_cubit.dart';
 import 'package:vignesh_project_01/features/user/presentation/cubits/user_list/user_list_states.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/custom_error_widget.dart';
 import 'package:vk_custom_widgets/vk_custom_widgets.dart';
 
@@ -36,7 +38,7 @@ class _UserListViewState extends State<UserListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('User List')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.userListTitle)),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
@@ -44,7 +46,7 @@ class _UserListViewState extends State<UserListView> {
             SizedBox(height: 20.h),
             VkTextFormField(
               controller: _searchController,
-              label: 'Search user',
+              label: AppLocalizations.of(context)!.searchUserLabel,
               onChanged: (value) {
                 if (_debounce?.isActive ?? true) _debounce?.cancel();
                 _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -68,7 +70,11 @@ class _UserListViewState extends State<UserListView> {
                 }
                 if (state is UserListLoaded) {
                   return state.users.isEmpty
-                      ? Center(child: Text('No users found'))
+                      ? Center(
+                          child: Text(
+                            AppLocalizations.of(context)!.noUsersFound,
+                          ),
+                        )
                       : Expanded(
                           child: ListView.separated(
                             itemCount: state.users.length,
@@ -82,7 +88,9 @@ class _UserListViewState extends State<UserListView> {
                         );
                 }
 
-                return Center(child: Text('No Users'));
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noUsers),
+                );
               },
             ),
           ],

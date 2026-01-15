@@ -1,0 +1,34 @@
+{
+  "@@locale": "es",
+  
+  "appTitle": "VChat",
+  "appName": "VChat",
+  
+  "chatListTitle": "VChat",
+  "searchLabel": "Buscar",
+  "noChatMessage": "Sin chats",
+  "sendMessagePlaceholder": "¡Envía un mensaje para comenzar!",
+  
+  "userProfileTitle": "Perfil de usuario",
+  "userListTitle": "Lista de usuarios",
+  "searchUserLabel": "Buscar usuario",
+  "noUsersFound": "No se encontraron usuarios",
+  "noUsers": "Sin usuarios",
+  "nameLabel": "Nombre",
+  "emailLabel": "Correo electrónico",
+  "saveButtonLabel": "Guardar",
+  "logoutButtonLabel": "Cerrar sesión",
+  "retryButtonLabel": "Reintentar",
+  
+  "updateAvailableTitle": "Actualización disponible",
+  "updateLaterButtonLabel": "Actualizar después",
+  "updateNowButtonLabel": "Actualizar ahora",
+  "updateToContinueButtonLabel": "Actualizar para continuar",
+  "defaultUpdateMessage": "Una nueva versión de la aplicación está disponible. Por favor, actualiza para continuar.",
+  
+  "confirmDialogTitle": "Confirmar",
+  "okButtonLabel": "Aceptar",
+  "cancelButtonLabel": "Cancelar",
+  "generalErrorMessage": "¡Algo salió mal!",
+  "networkErrorMessage": "Error de red. Por favor, intenta de nuevo"
+}

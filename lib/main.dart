@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/di/cubits.dart';
+import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/helpers/firebase_background_handler.dart';
 import 'package:vignesh_project_01/core/routes/app_routes.dart';
 import 'package:vignesh_project_01/core/services/push_notification_service.dart';
@@ -13,6 +13,9 @@ import 'package:vignesh_project_01/core/services/socket_service.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
 import 'package:vignesh_project_01/core/themes/app_theme.dart';
 import 'package:vignesh_project_01/firebase_options.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
+import 'package:vignesh_project_01/shared/presentation/cubits/locale/locale_cubit.dart';
+import 'package:vignesh_project_01/shared/presentation/cubits/locale/locale_states.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,16 +32,17 @@ class VigneshProject01 extends StatefulWidget {
 }
 
 class _VigneshProject01State extends State<VigneshProject01> {
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  await locator<StorageService>().initialize();
-  await locator<PushNotificationService>().initialize();
-  locator<SocketService>().connect();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      await locator<StorageService>().initialize();
+      await locator<PushNotificationService>().initialize();
+      locator<SocketService>().connect();
     });
   }
 
@@ -49,7 +53,17 @@ class _VigneshProject01State extends State<VigneshProject01> {
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
         minTextAdapt: true,
-        child: MaterialApp(theme: theme, onGenerateRoute: onGenerateRoute),
+        child: BlocBuilder<LocaleCubit, LocaleState>(
+          builder: (context, state) {
+            return MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: state.locale,
+              theme: theme,
+              onGenerateRoute: onGenerateRoute,
+            );
+          },
+        ),
       ),
     );
   }

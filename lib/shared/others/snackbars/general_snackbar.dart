@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
 import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
   required BuildContext context,
@@ -29,7 +30,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
         SizedBox(width: 10.w),
         Expanded(
           child: Text(
-            errorMessage ?? "Something went wrong!",
+            errorMessage ?? AppLocalizations.of(context)!.generalErrorMessage,
             style: AppStyles.ts16W400cWhite,
           ),
         ),

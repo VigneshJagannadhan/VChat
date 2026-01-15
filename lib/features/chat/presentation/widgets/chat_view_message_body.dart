@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:vignesh_project_01/core/themes/app_styles.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/message_bubble.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
 
 class ChatViewMessageBody extends StatelessWidget {
   const ChatViewMessageBody({super.key});
@@ -85,7 +87,9 @@ class ChatViewMessageBody extends StatelessWidget {
                 );
         }
 
-        return Center(child: Text("Send a message to get started!"));
+        return Center(
+          child: Text(AppLocalizations.of(context)!.sendMessagePlaceholder),
+        );
       },
     );
   }

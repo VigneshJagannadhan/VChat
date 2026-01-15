@@ -13,6 +13,7 @@ import 'package:vignesh_project_01/features/user/presentation/cubits/user/user_c
 import 'package:vignesh_project_01/features/user/presentation/cubits/user_list/user_list_cubit.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/fcm_repository.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/update_repository.dart';
+import 'package:vignesh_project_01/shared/presentation/cubits/locale/locale_cubit.dart';
 import 'package:vignesh_project_01/shared/presentation/cubits/update/update_cubit.dart';
 
 List<BlocProvider> get cubits => [
@@ -44,7 +45,11 @@ List<BlocProvider> get cubits => [
   ),
 
   BlocProvider<UpdateCubit>(
-    create: (context) =>
-        UpdateCubit(updateRepository: locator<UpdateRepository>(), updateService: locator<UpdateService>()),
+    create: (context) => UpdateCubit(
+      updateRepository: locator<UpdateRepository>(),
+      updateService: locator<UpdateService>(),
+    ),
   ),
+
+  BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()),
 ];

@@ -8,4 +8,5 @@ class AppUrls {
   static const String chats = 'chats';
   static const String profile = 'profile';
   static const String sendMessage = 'chats/send';
+  static const String checkForUpdate = 'app/version';
 }

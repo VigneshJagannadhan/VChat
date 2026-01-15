@@ -5,6 +5,7 @@ import 'package:vignesh_project_01/core/services/api_service.dart';
 import 'package:vignesh_project_01/core/services/push_notification_service.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
+import 'package:vignesh_project_01/core/services/update_service.dart';
 import 'package:vignesh_project_01/features/auth/data/data_sources/auth_data_source.dart';
 import 'package:vignesh_project_01/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:vignesh_project_01/features/auth/domain/repositories/auth_repository.dart';
@@ -14,19 +15,27 @@ import 'package:vignesh_project_01/features/chat/domain/repositories/chat_reposi
 import 'package:vignesh_project_01/features/user/data/data_sources/user_data_source.dart';
 import 'package:vignesh_project_01/features/user/data/repositories/user_repository_impl.dart';
 import 'package:vignesh_project_01/features/user/domain/repositories/user_repository.dart';
-import 'package:vignesh_project_01/shared/data/data_sources/fcm_data_sources.dart';
+import 'package:vignesh_project_01/shared/data/data_sources/fcm_data_source.dart';
+import 'package:vignesh_project_01/shared/data/data_sources/update_data_source.dart';
 import 'package:vignesh_project_01/shared/data/repositories/fcm_repository_impl.dart';
+import 'package:vignesh_project_01/shared/data/repositories/update_repository_impl.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/fcm_repository.dart';
+import 'package:vignesh_project_01/shared/domain/repositories/update_repository.dart';
 import 'package:vignesh_project_01/shared/others/providers/token_provider.dart';
 
 final locator = GetIt.instance;
 
 void setupLocator() {
+
+  /// SERVICES
+
   locator.registerLazySingleton(() => ApiService());
 
   locator.registerLazySingleton(() => StorageService());
 
   locator.registerLazySingleton(() => SocketService());
+  
+  locator.registerLazySingleton(() => UpdateService());
 
   locator.registerLazySingleton<FirebaseMessaging>(
     () => FirebaseMessaging.instance,
@@ -51,6 +60,13 @@ void setupLocator() {
     () => FcmRepositoryImpl(fcmDataSource: locator<FcmDataSource>()),
   );
 
+  locator.registerLazySingleton<UpdateRepository>(
+    () => UpdateRepositoryImpl(updateDataSource: locator<UpdateDataSource>()),
+  );
+
+  locator.registerLazySingleton<UpdateDataSource>(
+    () => UpdateDataSourceImpl(apiService: locator<ApiService>()),
+  );
   locator.registerLazySingleton<TokenProvider>(
     () => SecureTokenProvider(locator<StorageService>()),
   );
@@ -75,4 +91,5 @@ void setupLocator() {
   locator.registerFactory<UserRepository>(
     () => UserRepositoryImpl(dataSources: locator<UserDataSources>()),
   );
+
 }

@@ -31,9 +31,7 @@ class ChatModel {
 
   Map<String, dynamic> toJson() => _$ChatModelToJson(this);
 
-  ChatEntity toEntity() {
-    String userId = locator<StorageService>().fetchUserId() ?? '';
-
+  ChatEntity toEntity({required String userId}) {
     // Check if participants list exists and is not empty
     ParticipantModel? otherParticipant;
     if (participants != null && participants!.isNotEmpty) {

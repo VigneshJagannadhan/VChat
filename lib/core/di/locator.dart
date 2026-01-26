@@ -104,6 +104,7 @@ void setupLocator() {
     () => ChatRepositoryImpl(
       chatRemoteDataSource: locator<ChatRemoteDataSource>(),
       chatLocalDataSource: locator<ChatLocalDataSource>(),
+      storageService: locator<StorageService>(),
     ),
   );
 

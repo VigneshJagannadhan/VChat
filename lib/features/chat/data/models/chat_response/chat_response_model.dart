@@ -18,9 +18,11 @@ class ChatResponseModel {
 
   Map<String, dynamic> toJson() => _$ChatResponseModelToJson(this);
 
-  ChatResponseEntity toEntity() {
+  ChatResponseEntity toEntity({required String userId}) {
     return ChatResponseEntity(
-      chats: chats?.map((chatModel) => chatModel.toEntity()).toList(),
+      chats: chats
+          ?.map((chatModel) => chatModel.toEntity(userId: userId))
+          .toList(),
       page: page,
       pages: pages,
       total: total,

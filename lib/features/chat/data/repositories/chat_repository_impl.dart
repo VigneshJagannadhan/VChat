@@ -1,5 +1,7 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
+import 'package:vignesh_project_01/core/services/storage_service.dart';
 import 'package:vignesh_project_01/features/chat/data/data_sources/chat_data_sources/chat_data_source.dart';
 import 'package:vignesh_project_01/features/chat/data/models/chat_response/chat_response_model.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/chat_detail_entity.dart';
@@ -10,20 +12,23 @@ import 'package:vignesh_project_01/features/chat/domain/repositories/chat_reposi
 class ChatRepositoryImpl extends ChatRepository {
   ChatRemoteDataSource chatRemoteDataSource;
   ChatLocalDataSource chatLocalDataSource;
+  StorageService storageService;
 
   ChatRepositoryImpl({
     required this.chatRemoteDataSource,
     required this.chatLocalDataSource,
+    required this.storageService,
   });
+
+  String get _currentUserId => storageService.fetchUserId() ?? '';
 
   /// ---------------------- CHAT LIST ----------------------
   @override
   Either<Failure, ChatResponseEntity> getChatList({String? search}) {
     var result = chatLocalDataSource.getChatList();
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => Right(response.toEntity()),
-    );
+    return result.fold((failure) => Left(failure), (response) {
+      return Right(response.toEntity(userId: _currentUserId));
+    });
   }
 
   @override
@@ -33,7 +38,7 @@ class ChatRepositoryImpl extends ChatRepository {
     var result = await chatRemoteDataSource.getChatList(search: search);
     return result.fold((failure) => Left(failure), (response) async {
       await chatLocalDataSource.saveChatList(response);
-      return Right(response.toEntity());
+      return Right(response.toEntity(userId: _currentUserId));
     });
   }
 
@@ -68,7 +73,9 @@ class ChatRepositoryImpl extends ChatRepository {
     required String id,
   }) async {
     var result = await chatRemoteDataSource.getChatRoomId(id: id);
-    return result.map((response) => response.toEntity());
+    return result.map((response) {
+      return response.toEntity(userId: _currentUserId);
+    });
   }
 
   @override

@@ -14,7 +14,10 @@ abstract class ChatRepository {
   Future<Either<Failure, ChatEntity>> getChatRoomId({required String id});
 
   /// CHAT DETAIL
-  Future<Either<Failure, ChatDetailEntity>> getChatDetail({required String id});
+  Either<Failure, ChatDetailEntity> getChatDetail({required String id});
+  Future<Either<Failure, ChatDetailEntity>> syncChatDetail({
+    required String id,
+  });
 
   /// SEND MESSAGE
   Future<Either<Failure, ChatResponseModel>> sendMessage({

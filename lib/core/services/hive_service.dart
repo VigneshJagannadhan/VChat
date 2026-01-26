@@ -3,12 +3,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 class HiveService {
   static const String appCacheBox = 'app_cache';
   static const String chatListBox = 'chat_list';
+  static const String chatDetailBox = 'chat_detail';
 
   Future<void> initialize() async {
     await Hive.initFlutter();
 
     await Hive.openBox(appCacheBox);
     await Hive.openBox(chatListBox);
+    await Hive.openBox(chatDetailBox);
   }
 
   T? get<T>({required String route, required String box}) {
@@ -46,5 +48,6 @@ class HiveService {
   Future<void> clearAll() async {
     await Hive.box(appCacheBox).clear();
     await Hive.box(chatListBox).clear();
+    await Hive.box(chatDetailBox).clear();
   }
 }

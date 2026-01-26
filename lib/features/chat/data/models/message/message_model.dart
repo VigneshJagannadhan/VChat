@@ -7,7 +7,7 @@ import 'package:vignesh_project_01/features/user/data/models/user/user_model.dar
 
 part 'message_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class MessageModel {
   @JsonKey(name: '_id')
   final String? id;

@@ -16,6 +16,7 @@ class ChatRepositoryImpl extends ChatRepository {
     required this.chatLocalDataSource,
   });
 
+  /// ---------------------- CHAT LIST ----------------------
   @override
   Either<Failure, ChatResponseEntity> getChatList({String? search}) {
     var result = chatLocalDataSource.getChatList();
@@ -36,14 +37,32 @@ class ChatRepositoryImpl extends ChatRepository {
     });
   }
 
+  /// ---------------------- CHAT DETAIL ----------------------
+
   @override
-  Future<Either<Failure, ChatDetailEntity>> getChatDetail({
+  Either<Failure, ChatDetailEntity> getChatDetail({required String id}) {
+    var result = chatLocalDataSource.getChatDetail(id: id);
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right(response.toEntity()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, ChatDetailEntity>> syncChatDetail({
     required String id,
   }) async {
     var result = await chatRemoteDataSource.getChatDetail(id: id);
-    return result.map((response) => response.toEntity());
+    return result.fold((failure) async => Left(failure), (response) async {
+      await chatLocalDataSource.saveChatDetail(
+        id: id,
+        chatDetailResponseModel: response,
+      );
+      return Right(response.toEntity());
+    });
   }
 
+  /// ---------------------- CHAT ROOM ID ----------------------
   @override
   Future<Either<Failure, ChatEntity>> getChatRoomId({
     required String id,

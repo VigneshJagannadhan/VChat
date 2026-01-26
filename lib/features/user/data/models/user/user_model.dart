@@ -3,7 +3,7 @@ import 'package:vignesh_project_01/features/user/domain/entities/user_entity.dar
 
 part 'user_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserModel {
   @JsonKey(name: '_id')
   String? id;

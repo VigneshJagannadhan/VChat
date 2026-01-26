@@ -28,9 +28,9 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) => MessageModel(
 Map<String, dynamic> _$MessageModelToJson(MessageModel instance) =>
     <String, dynamic>{
       '_id': instance.id,
-      'sender': instance.sender,
+      'sender': instance.sender?.toJson(),
       'content': instance.content,
-      'chat': instance.chat,
+      'chat': instance.chat?.toJson(),
       'readBy': instance.readBy,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),

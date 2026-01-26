@@ -16,11 +16,24 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
 
   Future<void> getChatDetail({required String id}) async {
     emit(ChatDetailLoading());
-    final result = await chatRepository.getChatDetail(id: id);
 
-    result.fold((failure) => emit(ChatDetailFailure(failure)), (response) {
+    final localResult = chatRepository.getChatDetail(id: id);
+    localResult.fold((failure) => emit(ChatDetailFailure(failure)), (response) {
       emit(ChatDetailLoaded(response.messages?.reversed.toList() ?? []));
     });
+
+    final syncResult = await chatRepository.syncChatDetail(id: id);
+
+    syncResult.fold(
+      (failure) {
+        if (state is! ChatDetailLoaded) {
+          emit(ChatDetailFailure(failure));
+        }
+      },
+      (response) {
+        emit(ChatDetailLoaded(response.messages?.reversed.toList() ?? []));
+      },
+    );
   }
 
   void addIncomingMessage(MessageEntity data) {

@@ -12,6 +12,7 @@ class ChatRemoteDataSourcesImpl extends ChatRemoteDataSource {
   ApiService apiService;
   ChatRemoteDataSourcesImpl({required this.apiService});
 
+  /// ---------------------- CHAT LIST ----------------------
   @override
   Future<Either<Failure, ChatResponseModel>> getChatList({
     String? search,
@@ -26,6 +27,7 @@ class ChatRemoteDataSourcesImpl extends ChatRemoteDataSource {
     );
   }
 
+  /// ---------------------- CHAT DETAIL ----------------------
   @override
   Future<Either<Failure, ChatDetailResponseModel>> getChatDetail({
     required String id,
@@ -38,6 +40,7 @@ class ChatRemoteDataSourcesImpl extends ChatRemoteDataSource {
     );
   }
 
+  /// ---------------------- GET CHAT ROOM ID ----------------------
   @override
   Future<Either<Failure, ChatModel>> getChatRoomId({required String id}) async {
     var result = await apiService.post(
@@ -50,6 +53,7 @@ class ChatRemoteDataSourcesImpl extends ChatRemoteDataSource {
     );
   }
 
+  /// ---------------------- SEND MESSAGE ----------------------
   @override
   Future<Either<Failure, ChatResponseModel>> sendMessage({
     required String userId,

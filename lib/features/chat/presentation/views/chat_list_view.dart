@@ -38,10 +38,7 @@ class _ChatListViewState extends State<ChatListView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((v) async {
       chatProvider = context.read<ChatCubit>();
-      UpdateCubit updateCubit = context.read<UpdateCubit>();
-
       await chatProvider?.getChatList();
-      updateCubit.checkForUpdate();
     });
   }
 

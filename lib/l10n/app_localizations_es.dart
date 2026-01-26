@@ -88,5 +88,5 @@ class AppLocalizationsEs extends AppLocalizations {
   String get networkErrorMessage => 'Error de red. Por favor, intenta de nuevo';
 
   @override
-  String get settingsButtonTooltip => 'Settings';
+  String get settingsButtonTooltip => 'Configuración';
 }

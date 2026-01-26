@@ -30,5 +30,7 @@
   "okButtonLabel": "Aceptar",
   "cancelButtonLabel": "Cancelar",
   "generalErrorMessage": "¡Algo salió mal!",
-  "networkErrorMessage": "Error de red. Por favor, intenta de nuevo"
+  "networkErrorMessage": "Error de red. Por favor, intenta de nuevo",
+  
+  "settingsButtonTooltip": "Configuración"
 }

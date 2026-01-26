@@ -8,6 +8,7 @@ import 'package:vignesh_project_01/core/di/cubits.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/helpers/firebase_background_handler.dart';
 import 'package:vignesh_project_01/core/routes/app_routes.dart';
+import 'package:vignesh_project_01/core/services/hive_service.dart';
 import 'package:vignesh_project_01/core/services/push_notification_service.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
@@ -41,6 +42,7 @@ class _VigneshProject01State extends State<VigneshProject01> {
       );
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
       await locator<StorageService>().initialize();
+      await locator<HiveService>().initialize();
       await locator<PushNotificationService>().initialize();
       locator<SocketService>().connect();
     });

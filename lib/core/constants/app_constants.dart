@@ -6,6 +6,7 @@ class AppConstants {
   static const String spUserEmail = 'sp_user_email';
   static const String spDarkMode = 'sp_dark_mode';
   static const String spAccessId = 'sp_access_id';
+  static const String spVersion = 'sp_version';
 
   /// Table Names
   static const String usersTable = 'users';

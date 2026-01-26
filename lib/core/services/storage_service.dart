@@ -93,4 +93,18 @@ class StorageService {
   Future<void> clearAccessId() async {
     await _secureStorage.delete(key: AppConstants.spAccessId);
   }
+
+  /// -------------------------- VERSION ----------------------------- ///
+
+  Future<void> saveVersion({required String version}) async {
+    await _sharedPreferences?.setString(AppConstants.spVersion, version);
+  }
+
+  String? fetchVersion() {
+    return _sharedPreferences?.getString(AppConstants.spVersion);
+  }
+
+  Future<void> clearVersion() async {
+    await _sharedPreferences?.remove(AppConstants.spVersion);
+  }
 }

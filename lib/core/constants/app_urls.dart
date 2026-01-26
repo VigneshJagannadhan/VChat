@@ -1,6 +1,10 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class AppUrls {
-  static const String baseUrl = 'http://192.168.29.75:3000/api/';
-  static const String socketUrl = 'http://192.168.29.75:3000';
+  static String getBaseUrl() => (dotenv.env['BASE_URL'] ?? '');
+
+  static String baseUrl = '${getBaseUrl()}/api/';
+  static String socketUrl = getBaseUrl();
   static const String signup = 'auth/register';
   static const String signin = 'auth/login';
   static const String fcmToken = 'user/fcm-token';

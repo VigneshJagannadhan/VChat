@@ -3,7 +3,6 @@ import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/hive_service.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
-import 'package:vignesh_project_01/core/services/update_service.dart';
 import 'package:vignesh_project_01/features/auth/domain/repositories/auth_repository.dart';
 import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:vignesh_project_01/features/chat/domain/repositories/chat_repository.dart';
@@ -49,7 +48,7 @@ List<BlocProvider> get cubits => [
   BlocProvider<UpdateCubit>(
     create: (context) => UpdateCubit(
       updateRepository: locator<UpdateRepository>(),
-      updateService: locator<UpdateService>(),
+      storageService: locator<StorageService>(),
     ),
   ),
 

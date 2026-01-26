@@ -166,45 +166,65 @@ class _ChatListViewState extends State<ChatListView> {
                   }
 
                   return Expanded(
-                    child: ListView.separated(
-                      itemCount: state.chats.length,
-                      separatorBuilder: (context, index) =>
-                          Divider(height: 0.5.h, thickness: 0.5.h),
-                      itemBuilder: (_, index) {
-                        final chat = state.chats[index];
-                        final username = chat.participant?.username ?? '';
-                        final time =
-                            chat.lastMessage?.createdAt?.messageFormat() ?? '';
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        ListView.separated(
+                          itemCount: state.chats.length,
+                          separatorBuilder: (context, index) =>
+                              Divider(height: 0.5.h, thickness: 0.5.h),
+                          itemBuilder: (_, index) {
+                            final chat = state.chats[index];
+                            final username = chat.participant?.username ?? '';
+                            final time =
+                                chat.lastMessage?.createdAt?.messageFormat() ??
+                                '';
 
-                        return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 5.w,
-                            ),
-                            leading: Stack(
-                              children: [
-                                CircleAvatar(radius: 20.r),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.green,
-                                    radius: 5.r,
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 5.w,
+                                ),
+                                leading: Stack(
+                                  children: [
+                                    CircleAvatar(radius: 20.r),
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.green,
+                                        radius: 5.r,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                title: Text(username.toUpperCase()),
+                                subtitle: Text(chat.lastMessage?.content ?? ''),
+                                trailing: Text(time),
+                                onTap: () => Navigator.of(context).pushNamed(
+                                  ChatView.route,
+                                  arguments: ChatDetailViewArgs(
+                                    chatId: chat.id,
                                   ),
                                 ),
+                              ),
+                            );
+                          },
+                        ),
+                        if (state.isSyncing)
+                          Positioned(
+                            bottom: 30.h,
+                            child: Row(
+                              mainAxisAlignment: .center,
+                              children: [
+                                Text('Syncing...'),
+                                SizedBox(width: 10.w),
+                                CupertinoActivityIndicator(),
                               ],
                             ),
-                            title: Text(username.toUpperCase()),
-                            subtitle: Text(chat.lastMessage?.content ?? ''),
-                            trailing: Text(time),
-                            onTap: () => Navigator.of(context).pushNamed(
-                              ChatView.route,
-                              arguments: ChatDetailViewArgs(chatId: chat.id),
-                            ),
                           ),
-                        );
-                      },
+                      ],
                     ),
                   );
                 }

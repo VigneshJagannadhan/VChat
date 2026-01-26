@@ -12,20 +12,23 @@ class UserListCubit extends Cubit<UserListState> {
 
     final localResult = userRepository.fetchUserList(search: search);
 
-    localResult.fold((failure) => emit(UserListFailure(failure)), (response) {
-      emit(UserListLoaded(response.users ?? []));
+    localResult.fold((failure) => null, (response) {
+      emit(UserListLoaded(users: response.users ?? [], isSyncing: true));
     });
 
     final result = await userRepository.syncUserList(search: search);
 
     result.fold(
       (failure) {
-        if (state is! UserListLoaded) {
+        if (state is UserListLoaded) {
+          final currentState = state as UserListLoaded;
+          emit(UserListLoaded(users: currentState.users, isSyncing: false));
+        } else {
           emit(UserListFailure(failure));
         }
       },
       (response) {
-        emit(UserListLoaded(response.users ?? []));
+        emit(UserListLoaded(users: response.users ?? [], isSyncing: false));
       },
     );
   }

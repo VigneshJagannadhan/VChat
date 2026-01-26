@@ -1,5 +1,4 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
 import 'package:vignesh_project_01/features/chat/data/data_sources/chat_data_sources/chat_data_source.dart';

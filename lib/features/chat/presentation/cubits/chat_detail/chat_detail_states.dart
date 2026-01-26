@@ -20,8 +20,13 @@ class ChatDetailLoading extends ChatDetailState {
 class ChatDetailLoaded extends ChatDetailState {
   final List<MessageEntity> messages;
   final bool isTyping;
+  final bool isSyncing;
 
-  const ChatDetailLoaded(this.messages, {this.isTyping = false});
+  const ChatDetailLoaded({
+    required this.messages,
+    required this.isTyping,
+    required this.isSyncing,
+  });
 
   @override
   List<Object?> get props => [messages, isTyping];

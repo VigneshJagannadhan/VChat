@@ -8,8 +8,9 @@ class ChatListInitial extends ChatListState {}
 class ChatListLoading extends ChatListState {}
 
 class ChatListLoaded extends ChatListState {
+  final bool isSyncing;
   final List<ChatEntity> chats;
-  ChatListLoaded(this.chats);
+  ChatListLoaded({required this.isSyncing, required this.chats});
 }
 
 class ChatListFailure extends ChatListState {

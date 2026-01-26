@@ -9,8 +9,8 @@ class UserLoading extends UserStates {}
 
 class UserLoaded extends UserStates {
   final UserEntity user;
-
-  UserLoaded(this.user);
+  final bool isSyncing;
+  UserLoaded({required this.user, required this.isSyncing});
 }
 
 class UserFailure extends UserStates {

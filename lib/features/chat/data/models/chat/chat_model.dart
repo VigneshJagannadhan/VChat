@@ -1,6 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vignesh_project_01/core/di/locator.dart';
-import 'package:vignesh_project_01/core/services/storage_service.dart';
 import 'package:vignesh_project_01/features/chat/data/models/last_message/last_message_model.dart';
 import 'package:vignesh_project_01/features/chat/data/models/participant/participant_model.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/chat_entity.dart';

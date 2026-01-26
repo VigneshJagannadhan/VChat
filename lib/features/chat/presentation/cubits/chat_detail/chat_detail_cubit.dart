@@ -18,8 +18,14 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     emit(ChatDetailLoading());
 
     final localResult = chatRepository.getChatDetail(id: id);
-    localResult.fold((failure) => emit(ChatDetailFailure(failure)), (response) {
-      emit(ChatDetailLoaded(response.messages?.reversed.toList() ?? []));
+    localResult.fold((failure) => null, (response) {
+      emit(
+        ChatDetailLoaded(
+          messages: response.messages?.reversed.toList() ?? [],
+          isTyping: false,
+          isSyncing: true,
+        ),
+      );
     });
 
     final syncResult = await chatRepository.syncChatDetail(id: id);
@@ -31,7 +37,13 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
         }
       },
       (response) {
-        emit(ChatDetailLoaded(response.messages?.reversed.toList() ?? []));
+        emit(
+          ChatDetailLoaded(
+            messages: response.messages?.reversed.toList() ?? [],
+            isTyping: false,
+            isSyncing: false,
+          ),
+        );
       },
     );
   }
@@ -42,7 +54,13 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
       log('➕ Adding incoming message to list');
       final currentState = state as ChatDetailLoaded;
       final updatedMessages = List.of(currentState.messages)..insert(0, data);
-      emit(ChatDetailLoaded(updatedMessages));
+      emit(
+        ChatDetailLoaded(
+          messages: updatedMessages,
+          isTyping: false,
+          isSyncing: false,
+        ),
+      );
     } else {
       log('⚠️ addIncomingMessage ignored: State is ${state.runtimeType}');
     }
@@ -53,7 +71,13 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
       log('➕ Adding Outgoing message to list');
       final currentState = state as ChatDetailLoaded;
       final updatedMessages = List.of(currentState.messages)..insert(0, data);
-      emit(ChatDetailLoaded(updatedMessages));
+      emit(
+        ChatDetailLoaded(
+          messages: updatedMessages,
+          isTyping: false,
+          isSyncing: false,
+        ),
+      );
     } else {
       log('⚠️ addOutgoingMessage ignored: State is ${state.runtimeType}');
     }
@@ -63,7 +87,13 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     if (chatRoomId != currentChatRoomId) return;
     if (state is ChatDetailLoaded) {
       final currentState = state as ChatDetailLoaded;
-      emit(ChatDetailLoaded(currentState.messages, isTyping: isTyping));
+      emit(
+        ChatDetailLoaded(
+          messages: currentState.messages,
+          isTyping: isTyping,
+          isSyncing: false,
+        ),
+      );
     }
   }
 

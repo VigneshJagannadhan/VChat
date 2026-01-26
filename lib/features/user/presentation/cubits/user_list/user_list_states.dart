@@ -9,7 +9,8 @@ class UserListLoading extends UserListState {}
 
 class UserListLoaded extends UserListState {
   final List<UserModel> users;
-  UserListLoaded(this.users);
+  final bool isSyncing;
+  UserListLoaded({required this.users, required this.isSyncing});
 }
 
 class UserListFailure extends UserListState {

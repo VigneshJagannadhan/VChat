@@ -22,6 +22,6 @@ class AppColors {
   static Color get cGreeen => Colors.green;
 
   /// CUSTOM COLORS
-  static Color get c0101ff => Color(0xFF0101ff);
+  static Color get c0101ff => Color.fromARGB(255, 1, 132, 255);
   static Color get c161F28 => Color(0xFF161F28);
 }

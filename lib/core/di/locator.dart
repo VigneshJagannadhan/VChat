@@ -15,7 +15,9 @@ import 'package:vignesh_project_01/features/chat/data/data_sources/chat_data_sou
 import 'package:vignesh_project_01/features/chat/data/data_sources/chat_data_sources/chat_remote_data_source.dart';
 import 'package:vignesh_project_01/features/chat/data/repositories/chat_repository_impl.dart';
 import 'package:vignesh_project_01/features/chat/domain/repositories/chat_repository.dart';
-import 'package:vignesh_project_01/features/user/data/data_sources/user_data_source.dart';
+import 'package:vignesh_project_01/features/user/data/data_sources/user_data_source/user_data_source.dart';
+import 'package:vignesh_project_01/features/user/data/data_sources/user_data_source/user_local_data_source.dart';
+import 'package:vignesh_project_01/features/user/data/data_sources/user_data_source/user_remote_data_source.dart';
 import 'package:vignesh_project_01/features/user/data/repositories/user_repository_impl.dart';
 import 'package:vignesh_project_01/features/user/domain/repositories/user_repository.dart';
 import 'package:vignesh_project_01/shared/data/data_sources/fcm_data_source.dart';
@@ -105,10 +107,16 @@ void setupLocator() {
     ),
   );
 
-  locator.registerFactory<UserDataSources>(
-    () => UserDataSourcesImpl(apiService: locator<ApiService>()),
+  locator.registerFactory<UserRemoteDataSources>(
+    () => UserRemoteDataSourcesImpl(apiService: locator<ApiService>()),
+  );
+  locator.registerFactory<UserLocalDataSource>(
+    () => UserLocalDataSourceImpl(hiveService: locator<HiveService>()),
   );
   locator.registerFactory<UserRepository>(
-    () => UserRepositoryImpl(dataSources: locator<UserDataSources>()),
+    () => UserRepositoryImpl(
+      remoteDataSource: locator<UserRemoteDataSources>(),
+      localDataSource: locator<UserLocalDataSource>(),
+    ),
   );
 }

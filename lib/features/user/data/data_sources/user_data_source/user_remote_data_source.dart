@@ -2,17 +2,13 @@ import 'package:fpdart/fpdart.dart';
 import 'package:vignesh_project_01/core/constants/app_urls.dart';
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
 import 'package:vignesh_project_01/core/services/api_service.dart';
+import 'package:vignesh_project_01/features/user/data/data_sources/user_data_source/user_data_source.dart';
 import 'package:vignesh_project_01/features/user/data/models/user/user_model.dart';
 import 'package:vignesh_project_01/features/user/data/models/user_response/user_response_model.dart';
 
-abstract class UserDataSources {
-  Future<Either<Failure, UserListResponseModel>> getUserList({String? search});
-  Future<Either<Failure, UserModel>> getProfileDetail();
-}
-
-class UserDataSourcesImpl extends UserDataSources {
+class UserRemoteDataSourcesImpl extends UserRemoteDataSources {
   ApiService apiService;
-  UserDataSourcesImpl({required this.apiService});
+  UserRemoteDataSourcesImpl({required this.apiService});
 
   @override
   Future<Either<Failure, UserListResponseModel>> getUserList({

@@ -4,6 +4,8 @@ class HiveService {
   static const String appCacheBox = 'app_cache';
   static const String chatListBox = 'chat_list';
   static const String chatDetailBox = 'chat_detail';
+  static const String userListBox = 'user_list';
+  static const String profileBox = 'profile';
 
   Future<void> initialize() async {
     await Hive.initFlutter();
@@ -11,6 +13,8 @@ class HiveService {
     await Hive.openBox(appCacheBox);
     await Hive.openBox(chatListBox);
     await Hive.openBox(chatDetailBox);
+    await Hive.openBox(userListBox);
+    await Hive.openBox(profileBox);
   }
 
   T? get<T>({required String route, required String box}) {
@@ -49,5 +53,7 @@ class HiveService {
     await Hive.box(appCacheBox).clear();
     await Hive.box(chatListBox).clear();
     await Hive.box(chatDetailBox).clear();
+    await Hive.box(userListBox).clear();
+    await Hive.box(profileBox).clear();
   }
 }

@@ -31,7 +31,7 @@ class _UserListViewState extends State<UserListView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((v) async {
       UserListCubit userProvider = context.read<UserListCubit>();
-      await userProvider.findUsers();
+      await userProvider.fetchUsers();
     });
   }
 
@@ -50,7 +50,7 @@ class _UserListViewState extends State<UserListView> {
               onChanged: (value) {
                 if (_debounce?.isActive ?? true) _debounce?.cancel();
                 _debounce = Timer(const Duration(milliseconds: 500), () {
-                  context.read<UserListCubit>().findUsers(search: value);
+                  context.read<UserListCubit>().fetchUsers(search: value);
                 });
               },
             ),
@@ -63,7 +63,7 @@ class _UserListViewState extends State<UserListView> {
                 if (state is UserListFailure) {
                   return CustomErrorWidget(
                     message: state.failure.message,
-                    onRetry: () => context.read<UserListCubit>().findUsers(
+                    onRetry: () => context.read<UserListCubit>().fetchUsers(
                       search: _searchController.text,
                     ),
                   );

@@ -20,7 +20,7 @@ UserListResponseModel _$UserListResponseModelFromJson(
 Map<String, dynamic> _$UserListResponseModelToJson(
   UserListResponseModel instance,
 ) => <String, dynamic>{
-  'users': instance.users,
+  'users': instance.users?.map((e) => e.toJson()).toList(),
   'page': instance.page,
   'pages': instance.pages,
   'total': instance.total,

@@ -3,7 +3,7 @@ import 'package:vignesh_project_01/features/user/data/models/user/user_model.dar
 
 part 'user_response_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserListResponseModel {
   List<UserModel>? users;
   int? page;

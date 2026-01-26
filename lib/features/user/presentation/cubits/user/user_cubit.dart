@@ -9,7 +9,15 @@ class UserCubit extends Cubit<UserStates> {
 
   void getUserDetail() async {
     emit(UserLoading());
-    var result = await userRepository.getProfileDetail();
+
+    var localResult = userRepository.getProfileDetail();
+
+    localResult.fold(
+      (failure) => emit(UserFailure(failure)),
+      (response) => emit(UserLoaded(response)),
+    );
+
+    var result = await userRepository.syncProfileDetail();
     result.fold(
       (error) => emit(UserFailure(error)),
       (response) => emit(UserLoaded(response)),

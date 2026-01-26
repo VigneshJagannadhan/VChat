@@ -33,11 +33,21 @@ class ChatModel {
 
   ChatEntity toEntity() {
     String userId = locator<StorageService>().fetchUserId() ?? '';
+
+    // Check if participants list exists and is not empty
+    ParticipantModel? otherParticipant;
+    if (participants != null && participants!.isNotEmpty) {
+      // Find the first person who isn't me,
+      // or default to the first person (me) if I'm alone.
+      otherParticipant = participants!.firstWhere(
+        (e) => e.id != userId,
+        orElse: () => participants!.first,
+      );
+    }
+
     return ChatEntity(
       id: id,
-      participant: participants != null && participants!.isNotEmpty
-          ? participants!.firstWhere((e) => e.id != userId)
-          : null,
+      participant: otherParticipant,
       lastMessage: lastMessage,
     );
   }

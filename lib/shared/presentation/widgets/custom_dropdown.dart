@@ -26,10 +26,16 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
   OverlayEntry? _overlayEntry;
   bool _isOpen = false;
 
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 200),
-  );
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+  }
 
   @override
   void dispose() {

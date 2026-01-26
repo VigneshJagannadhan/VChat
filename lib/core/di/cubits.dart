@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
+import 'package:vignesh_project_01/core/services/hive_service.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
 import 'package:vignesh_project_01/core/services/update_service.dart';
@@ -23,6 +24,7 @@ List<BlocProvider> get cubits => [
       authRepository: locator<AuthRepository>(),
       storageService: locator<StorageService>(),
       socketService: locator<SocketService>(),
+      hiveService: locator<HiveService>(),
     ),
   ),
 

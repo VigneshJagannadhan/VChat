@@ -3,7 +3,7 @@ import 'package:vignesh_project_01/features/chat/data/models/sender/sender_model
 
 part 'last_message_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LastMessageModel {
   String? id;
   SenderModel? sender;

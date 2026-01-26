@@ -7,7 +7,7 @@ import 'package:vignesh_project_01/features/chat/domain/entities/chat_entity.dar
 
 part 'chat_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ChatModel {
   @JsonKey(name: '_id')
   String? id;

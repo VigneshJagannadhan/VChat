@@ -37,9 +37,6 @@ class _SplashViewState extends State<SplashView> {
       await storageService.saveVersion(version: version);
       await updateCubit.checkForUpdate();
 
-      /// ADDING A DELAY JUST TO DISPLAY THE SPLASH UI FOR 2 SECONDS
-      await Future.delayed(Duration(seconds: 2));
-
       var token = await storageService.fetchAccessToken();
       if (token != null) {
         if (!mounted) return;

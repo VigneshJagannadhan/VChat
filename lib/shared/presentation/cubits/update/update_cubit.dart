@@ -16,21 +16,17 @@ class UpdateCubit extends Cubit<UpdateStates> {
   Future<void> checkForUpdate() async {
     emit(UpdateLoading());
 
-    // 1. Try to load from cache first
-    var cachedResult = updateRepository.getCachedUpdate();
-    cachedResult.fold(
-      (failure) => null, // Ignore cache missing on first run
-      (updateEntity) => checkIfOutdated(updateEntity),
-    );
+    var cachedUpdate = updateRepository.getCachedUpdate();
+    cachedUpdate.fold((failure) => emit(UpdateFailure(failure: failure)), (
+      updateEntity,
+    ) async {
+      checkIfOutdated(updateEntity);
+    });
 
-    // 2. Sync from remote source
-    var syncResult = await updateRepository.syncUpdate();
-    syncResult.fold(
+    var result = await updateRepository.syncUpdate();
+    result.fold(
       (failure) {
-        // Only show error if we haven't successfully loaded from cache
-        if (state is! UpdateLoaded) {
-          emit(UpdateFailure(failure: failure));
-        }
+        emit(UpdateFailure(failure: failure));
       },
       (updateEntity) {
         checkIfOutdated(updateEntity);

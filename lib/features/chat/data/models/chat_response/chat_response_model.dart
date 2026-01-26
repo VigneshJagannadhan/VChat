@@ -4,7 +4,7 @@ import 'package:vignesh_project_01/features/chat/domain/entities/chat_response_e
 
 part 'chat_response_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ChatResponseModel {
   List<ChatModel>? chats;
   int? page;

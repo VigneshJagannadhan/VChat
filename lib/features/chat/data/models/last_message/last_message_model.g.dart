@@ -27,7 +27,7 @@ LastMessageModel _$LastMessageModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$LastMessageModelToJson(LastMessageModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'sender': instance.sender,
+      'sender': instance.sender?.toJson(),
       'content': instance.content,
       'chat': instance.chat,
       'readBy': instance.readBy,

@@ -12,7 +12,7 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       alignment: message.isSentByMe
           ? Alignment.centerRight
           : Alignment.centerLeft,

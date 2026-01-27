@@ -1,7 +1,7 @@
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
 import 'package:vignesh_project_01/features/user/domain/entities/user_entity.dart';
 
-class UserStates {}
+sealed class UserStates {}
 
 class UserIntial extends UserStates {}
 

@@ -1,7 +1,7 @@
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
 import 'package:vignesh_project_01/shared/domain/entities/update_entity.dart';
 
-class UpdateStates {}
+sealed class UpdateStates {}
 
 class UpdateInitial extends UpdateStates {}
 

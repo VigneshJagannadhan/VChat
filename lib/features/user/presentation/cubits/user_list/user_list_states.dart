@@ -1,5 +1,5 @@
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
-import 'package:vignesh_project_01/features/user/data/models/user/user_model.dart';
+import 'package:vignesh_project_01/features/user/domain/entities/user_entity.dart';
 
 sealed class UserListState {}
 
@@ -8,7 +8,7 @@ class UserListInitial extends UserListState {}
 class UserListLoading extends UserListState {}
 
 class UserListLoaded extends UserListState {
-  final List<UserModel> users;
+  final List<UserEntity> users;
   final bool isSyncing;
   UserListLoaded({required this.users, required this.isSyncing});
 }

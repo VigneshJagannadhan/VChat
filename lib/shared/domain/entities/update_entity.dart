@@ -1,15 +1,25 @@
-class UpdateEntity {
-  String? latestVersion;
-  String? minSupportedVersion;
-  bool? forceUpdate;
-  String? updateMessage;
+import 'package:equatable/equatable.dart';
 
-  UpdateEntity({
+class UpdateEntity extends Equatable {
+  final String? latestVersion;
+  final String? minSupportedVersion;
+  final bool? forceUpdate;
+  final String? updateMessage;
+
+  const UpdateEntity({
     this.latestVersion,
     this.minSupportedVersion,
     this.forceUpdate,
     this.updateMessage,
   });
+
+  @override
+  List<Object?> get props => [
+    latestVersion,
+    minSupportedVersion,
+    forceUpdate,
+    updateMessage,
+  ];
 
   bool isVersionOutdated({required String currentVersion}) {
     List<int> parseVersion(String v) {

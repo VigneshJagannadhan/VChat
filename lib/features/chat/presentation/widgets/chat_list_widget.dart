@@ -16,8 +16,10 @@ class ChatListWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          ListView.builder(
+          ListView.separated(
             itemCount: state.chats.length,
+            separatorBuilder: (_, index) =>
+                Divider(color: Colors.grey.shade300, height: 1),
             itemBuilder: (_, index) => ChatListItem(chat: state.chats[index]),
           ),
           if (state.isSyncing) Positioned(bottom: 30.h, child: SyncWidget()),

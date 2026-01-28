@@ -6,7 +6,7 @@ import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/c
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/views/test.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/chat_list_widget.dart';
-import 'package:vignesh_project_01/features/chat/presentation/widgets/send_new_message_widget.dart';
+import 'package:vignesh_project_01/features/chat/presentation/widgets/send_new_message_button.dart';
 import 'package:vignesh_project_01/features/user/presentation/views/user_profile_view.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
 import 'package:vignesh_project_01/shared/others/popups/update_app_version_popup.dart';
@@ -109,8 +109,10 @@ class _ChatListViewState extends State<ChatListView> {
 
                 if (state is ChatListLoaded) {
                   if (state.chats.isEmpty) {
-                    return EmptyListWidget(
-                      text: AppLocalizations.of(context)!.noChatMessage,
+                    return Expanded(
+                      child: EmptyListWidget(
+                        text: AppLocalizations.of(context)!.noChatMessage,
+                      ),
                     );
                   }
 

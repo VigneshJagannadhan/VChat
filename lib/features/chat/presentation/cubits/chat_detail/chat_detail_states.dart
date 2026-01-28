@@ -29,7 +29,7 @@ class ChatDetailLoaded extends ChatDetailState {
   });
 
   @override
-  List<Object?> get props => [messages, isTyping];
+  List<Object?> get props => [messages, isTyping, isSyncing];
 }
 
 class ChatDetailFailure extends ChatDetailState {

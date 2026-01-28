@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:vignesh_project_01/features/chat/data/models/last_message/last_message_model.dart';
-import 'package:vignesh_project_01/features/chat/data/models/participant/participant_model.dart';
+import 'package:vignesh_project_01/features/chat/domain/entities/last_message_entity.dart';
+import 'package:vignesh_project_01/features/chat/domain/entities/participant_entity.dart';
 
 class ChatEntity extends Equatable {
   final String? id;
-  final ParticipantModel? participant;
-  final LastMessageModel? lastMessage;
+  final ParticipantEntity? participant;
+  final LastMessageEntity? lastMessage;
 
   const ChatEntity({this.id, this.participant, this.lastMessage});
 

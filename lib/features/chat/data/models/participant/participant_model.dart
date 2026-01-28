@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:vignesh_project_01/features/chat/domain/entities/participant_entity.dart';
 
 part 'participant_model.g.dart';
 
@@ -25,4 +26,7 @@ class ParticipantModel {
       _$ParticipantModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ParticipantModelToJson(this);
+
+  ParticipantEntity toEntity() =>
+      ParticipantEntity(id: id, username: username, email: email);
 }

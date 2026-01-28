@@ -43,8 +43,8 @@ class ChatModel {
 
     return ChatEntity(
       id: id,
-      participant: otherParticipant,
-      lastMessage: lastMessage,
+      participant: otherParticipant?.toEntity(),
+      lastMessage: lastMessage?.toEntity(),
     );
   }
 }

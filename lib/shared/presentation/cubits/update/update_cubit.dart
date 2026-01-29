@@ -14,10 +14,10 @@ class UpdateCubit extends Cubit<UpdateStates> {
   Future<void> checkForUpdate() async {
     emit(UpdateLoading());
 
-    var cachedUpdate = updateRepository.getCachedUpdate();
-    cachedUpdate.fold((failure) => null, (updateEntity) async {
-      checkIfOutdated(updateEntity, isSyncing: true);
-    });
+    // var cachedUpdate = updateRepository.getCachedUpdate();
+    // cachedUpdate.fold((failure) => null, (updateEntity) async {
+    //   checkIfOutdated(updateEntity, isSyncing: true);
+    // });
 
     var result = await updateRepository.syncUpdate();
     result.fold(

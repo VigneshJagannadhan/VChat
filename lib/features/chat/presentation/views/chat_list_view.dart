@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vignesh_project_01/core/di/locator.dart';
+import 'package:vignesh_project_01/core/services/storage_service.dart';
+import 'package:vignesh_project_01/core/services/update_service.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/views/test.dart';
@@ -28,14 +31,23 @@ class ChatListView extends StatefulWidget {
 class _ChatListViewState extends State<ChatListView> {
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
-  ChatCubit? chatProvider;
+  late ChatCubit chatProvider;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((v) async {
       chatProvider = context.read<ChatCubit>();
-      await chatProvider?.getChatList();
+      StorageService storageService = locator<StorageService>();
+      UpdateService updateService = locator<UpdateService>();
+      UpdateCubit updateCubit = context.read<UpdateCubit>();
+
+      var version = await updateService.findVersion();
+      await storageService.saveVersion(version: version);
+      await Future.wait<void>([
+        updateCubit.checkForUpdate(),
+        chatProvider.getChatList(),
+      ]);
     });
   }
 
@@ -81,7 +93,7 @@ class _ChatListViewState extends State<ChatListView> {
                 onChanged: (value) {
                   if (_debounce?.isActive ?? false) _debounce?.cancel();
                   _debounce = Timer(const Duration(milliseconds: 500), () {
-                    chatProvider?.getChatList(search: value);
+                    chatProvider.getChatList(search: value);
                   });
                 },
               ),

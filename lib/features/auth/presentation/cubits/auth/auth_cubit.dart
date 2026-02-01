@@ -56,8 +56,8 @@ class AuthCubit extends Cubit<AuthState> {
     required BuildContext context,
   }) async {
     var fcmToken = await locator<PushNotificationService>().getFcmToken();
-    if (fcmToken == null) return false;
-    await saveToken(token: fcmToken);
+    // if (fcmToken == null) return false;
+    await saveToken(token: fcmToken ?? "");
 
     await storageService.saveAccessToken(token: response.token ?? "");
     await storageService.saveRefreshToken(token: response.token ?? "");

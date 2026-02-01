@@ -24,8 +24,8 @@ class ChatViewBottomNav extends StatefulWidget {
 
 class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
   Timer? _debounce;
-
   bool _isTyping = false;
+  ValueNotifier<bool> isNotEmpty = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +33,54 @@ class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
       color: AppColors.darkBackground,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
-        child: Row(
-          children: [
-            Expanded(
-              child: VkTextFormField(
-                controller: widget.messageController,
-                label: '',
-                borderWidth: 0.1.r,
-                borderRadius: 20.r,
-                onChanged: _onChanged,
-              ),
-            ),
-            SizedBox(width: 10.w),
-            SendMessageButton(onTap: _sendMessage),
-          ],
+        child: ValueListenableBuilder(
+          valueListenable: isNotEmpty,
+          builder: (context, notEmpty, child) {
+            return Row(
+              children: [
+                Expanded(
+                  child: VkTextFormField(
+                    controller: widget.messageController,
+                    label: '',
+                    borderWidth: 0.1.r,
+                    borderRadius: 20.r,
+                    onChanged: _onChanged,
+                  ),
+                ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 100),
+                  transitionBuilder: (child, animation) => SizeTransition(
+                    sizeFactor: animation,
+                    axis: Axis.horizontal,
+                    axisAlignment: -1.0,
+                    child: child,
+                  ),
+                  child: notEmpty
+                      ? Row(
+                          children: [
+                            SizedBox(width: 10.w),
+                            SendMessageButton(onTap: _sendMessage),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  void _onChanged(_) {
+  void _onChanged(String? value) {
     _debounce?.cancel();
     var socketService = locator<SocketService>();
+
+    if (value?.isNotEmpty ?? false) {
+      isNotEmpty.value = true;
+    } else {
+      isNotEmpty.value = false;
+    }
 
     if (!_isTyping) {
       socketService.startTyping(widget.chatId ?? "");
@@ -76,6 +102,7 @@ class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
         )
         .then((_) {
           widget.messageController.clear();
+          isNotEmpty.value = false;
         });
   }
 }

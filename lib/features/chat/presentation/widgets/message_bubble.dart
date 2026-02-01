@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/extensions/date_time_extensions.dart';
 import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/utils/enums.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/message_entity.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -35,15 +36,42 @@ class MessageBubble extends StatelessWidget {
                   : AppStyles.ts16W400cBlack,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-            child: Text(
-              (message.createdAt ?? DateTime.now()).toLocal().messageFormat(),
-              style: AppStyles.ts10W400cBlack,
-            ),
-          ),
+          !(message.isSentByMe)
+              ? SizedBox(height: 10.h)
+              : Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 5.h,
+                  ),
+                  child: Row(
+                    mainAxisSize: .min,
+                    children: [
+                      Text(
+                        (message.createdAt ?? DateTime.now())
+                            .toLocal()
+                            .messageFormat(),
+                        style: AppStyles.ts10W400cBlack,
+                      ),
+                      SizedBox(width: 5.w),
+                      _getIconData,
+                    ],
+                  ),
+                ),
         ],
       ),
     );
+  }
+
+  Icon get _getIconData {
+    switch (message.status) {
+      case MessageStatus.pending:
+        return Icon(Icons.timelapse_outlined, size: 10.sp, color: Colors.grey);
+      case MessageStatus.failed:
+        return Icon(Icons.error_outline, size: 10.sp, color: Colors.red);
+      case MessageStatus.success:
+        return Icon(Icons.check_circle, size: 10.sp, color: Colors.green);
+      default:
+        return Icon(Icons.timelapse_outlined, size: 10.sp);
+    }
   }
 }

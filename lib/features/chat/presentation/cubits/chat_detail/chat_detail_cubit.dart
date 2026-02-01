@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vignesh_project_01/core/utils/enums.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/message_entity.dart';
 import 'package:vignesh_project_01/features/chat/domain/repositories/chat_repository.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_states.dart';
@@ -68,7 +69,6 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
 
   void addOutgoingMessage(MessageEntity data) {
     if (state is ChatDetailLoaded) {
-      log('➕ Adding Outgoing message to list');
       final currentState = state as ChatDetailLoaded;
       final updatedMessages = List.of(currentState.messages)..insert(0, data);
       emit(
@@ -101,6 +101,16 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     required String userId,
     required String content,
   }) async {
+    final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+
+    MessageEntity pendingMessage = MessageEntity(
+      id: tempId,
+      content: content,
+      createdAt: DateTime.now(),
+      isSentByMe: true,
+      status: MessageStatus.pending,
+    );
+    addOutgoingMessage(pendingMessage);
     final result = await chatRepository.sendMessage(
       userId: userId,
       content: content,
@@ -108,17 +118,33 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
 
     result.fold(
       (failure) {
-        emit(ChatDetailFailure(failure));
+        updateMessageStatus(messageId: tempId, status: MessageStatus.failed);
       },
       (data) {
-        MessageEntity message = MessageEntity(
-          id: '',
-          content: content,
-          createdAt: DateTime.now(),
-          isSentByMe: true,
-        );
-        addOutgoingMessage(message);
+        updateMessageStatus(messageId: tempId, status: MessageStatus.success);
       },
+    );
+  }
+
+  void updateMessageStatus({
+    required String messageId,
+    required MessageStatus status,
+    String? newServerId,
+  }) {
+    var currentState = state as ChatDetailLoaded;
+    final updatedMessages = currentState.messages.map((message) {
+      if (message.id == messageId) {
+        return message.copyWith(status: status, id: newServerId ?? message.id);
+      }
+      return message;
+    }).toList();
+
+    emit(
+      ChatDetailLoaded(
+        messages: updatedMessages,
+        isTyping: isTyping,
+        isSyncing: false,
+      ),
     );
   }
 

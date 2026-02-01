@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
+import 'package:vignesh_project_01/core/utils/enums.dart';
 import 'package:vignesh_project_01/features/chat/data/models/chat/chat_model.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/message_entity.dart';
 import 'package:vignesh_project_01/features/user/data/models/user/user_model.dart';
@@ -37,15 +38,19 @@ class MessageModel {
 
   Map<String, dynamic> toJson() => _$MessageModelToJson(this);
 
-  MessageEntity toEntity() {
+  MessageEntity toEntity({required bool isFromApi}) {
     StorageService storageService = locator<StorageService>();
     var myId = storageService.fetchUserId();
+    if (myId == null) {
+      /// We need to log out the user
+    }
     return MessageEntity(
       id: id,
       chatRoomId: chat?.id,
       content: content,
       createdAt: createdAt,
       isSentByMe: sender?.id == myId,
+      status: isFromApi ? MessageStatus.success : MessageStatus.pending,
     );
   }
 }

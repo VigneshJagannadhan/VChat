@@ -5,6 +5,7 @@ import 'package:vignesh_project_01/core/themes/app_colors.dart';
 import 'package:vignesh_project_01/core/themes/app_styles.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_states.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/custom_loader_widget.dart';
 
 class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ChatViewAppBar({super.key, required this.name, required this.lastSeen});
@@ -19,7 +20,10 @@ class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: BlocBuilder<ChatDetailCubit, ChatDetailState>(
         builder: (context, state) {
           if (state is ChatDetailLoading) {
-            return CircularProgressIndicator();
+            return Text(
+              'Syncing latest messages...',
+              style: AppStyles.ts12W400cBlack,
+            );
           }
 
           if (state is ChatDetailFailure) {

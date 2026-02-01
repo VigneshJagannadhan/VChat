@@ -48,7 +48,7 @@ class ChatRepositoryImpl extends ChatRepository {
     var result = chatLocalDataSource.getChatDetail(id: id);
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right(response.toEntity()),
+      (response) => Right(response.toEntity(isFromApi: true)),
     );
   }
 
@@ -62,7 +62,7 @@ class ChatRepositoryImpl extends ChatRepository {
         id: id,
         chatDetailResponseModel: response,
       );
-      return Right(response.toEntity());
+      return Right(response.toEntity(isFromApi: true));
     });
   }
 
@@ -76,6 +76,8 @@ class ChatRepositoryImpl extends ChatRepository {
       return response.toEntity(userId: _currentUserId);
     });
   }
+
+  ///  ---------------------- SEND A MESSAGE ----------------------
 
   @override
   Future<Either<Failure, ChatResponseModel>> sendMessage({

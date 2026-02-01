@@ -39,7 +39,7 @@ class _ChatViewState extends State<ChatView> {
 
     _messageListenerResult = socketService.onMessageReceived((data) {
       try {
-        final entity = MessageModel.fromJson(data).toEntity();
+        final entity = MessageModel.fromJson(data).toEntity(isFromApi: true);
         _chatDetailCubit?.addIncomingMessage(entity);
       } catch (e, stack) {
         log('❌ Error processing message: $e\n$stack');

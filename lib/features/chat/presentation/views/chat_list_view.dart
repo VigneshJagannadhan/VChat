@@ -9,7 +9,7 @@ import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/c
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/views/test.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/chat_list_widget.dart';
-import 'package:vignesh_project_01/features/chat/presentation/widgets/send_new_message_button.dart';
+import 'package:vignesh_project_01/features/chat/presentation/widgets/start_new_chat_button.dart';
 import 'package:vignesh_project_01/features/user/presentation/views/user_profile_view.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
 import 'package:vignesh_project_01/shared/others/popups/update_app_version_popup.dart';
@@ -137,7 +137,7 @@ class _ChatListViewState extends State<ChatListView> {
           ],
         ),
 
-        floatingActionButton: SendNewMessageButton(),
+        floatingActionButton: StartNewChatButton(),
       ),
     );
   }

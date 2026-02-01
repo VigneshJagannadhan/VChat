@@ -26,4 +26,11 @@ extension DateTimeExtensions on DateTime {
   }
 
   String _twoDigits(int n) => n.toString().padLeft(2, '0');
+
+  String timeFormat() {
+    final hour12 = hour % 12 == 0 ? 12 : hour % 12;
+    final period = hour >= 12 ? 'pm' : 'am';
+
+    return '${_twoDigits(hour12)}:${_twoDigits(minute)} $period';
+  }
 }

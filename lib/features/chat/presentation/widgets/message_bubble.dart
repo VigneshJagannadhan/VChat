@@ -17,47 +17,41 @@ class MessageBubble extends StatelessWidget {
       alignment: message.isSentByMe
           ? Alignment.centerRight
           : Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: message.isSentByMe ? .end : .start,
-        children: [
-          Container(
-            constraints: BoxConstraints(minWidth: 0.3.sw, maxWidth: 0.7.sw),
-            padding: EdgeInsets.symmetric(horizontal: 15.r, vertical: 10.h),
-            decoration: BoxDecoration(
-              color: message.isSentByMe
-                  ? Colors.blueAccent.shade400
-                  : Colors.grey[300],
-              borderRadius: BorderRadius.circular(20.r),
+
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 0.7.sw),
+        margin: EdgeInsets.only(top: 5.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.r, vertical: 5.h),
+        decoration: BoxDecoration(
+          color: message.isSentByMe
+              ? Colors.blueAccent.shade400
+              : Colors.grey[300],
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        child: Row(
+          mainAxisSize: .min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Flexible(
+              fit: FlexFit.loose,
+              child: Text(
+                message.content ?? "",
+                style: message.isSentByMe
+                    ? AppStyles.ts16W400cWhite
+                    : AppStyles.ts16W400cBlack,
+              ),
             ),
-            child: Text(
-              message.content ?? "",
+            SizedBox(width: 5.w),
+            Text(
+              (message.createdAt ?? DateTime.now()).toLocal().timeFormat(),
               style: message.isSentByMe
-                  ? AppStyles.ts16W400cWhite
-                  : AppStyles.ts16W400cBlack,
+                  ? AppStyles.ts10W400cWhite
+                  : AppStyles.ts10W400cBlack,
             ),
-          ),
-          !(message.isSentByMe)
-              ? SizedBox(height: 10.h)
-              : Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 5.h,
-                  ),
-                  child: Row(
-                    mainAxisSize: .min,
-                    children: [
-                      Text(
-                        (message.createdAt ?? DateTime.now())
-                            .toLocal()
-                            .messageFormat(),
-                        style: AppStyles.ts10W400cBlack,
-                      ),
-                      SizedBox(width: 5.w),
-                      _getIconData,
-                    ],
-                  ),
-                ),
-        ],
+            if (message.isSentByMe) SizedBox(width: 5.w),
+            if (message.isSentByMe) _getIconData,
+          ],
+        ),
       ),
     );
   }

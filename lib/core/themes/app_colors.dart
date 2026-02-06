@@ -25,6 +25,6 @@ class AppColors {
   static Color get cGrey800 => Colors.grey.shade800;
 
   /// CUSTOM COLORS
-  static Color get c0101ff => Color.fromARGB(255, 1, 132, 255);
-  static Color get c161F28 => Color(0xFF161F28);
+  static Color get c0101ff => const Color.fromARGB(255, 1, 132, 255);
+  static Color get c161F28 => const Color(0xFF161F28);
 }

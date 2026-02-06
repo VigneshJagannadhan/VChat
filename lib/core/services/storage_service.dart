@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
 
 class StorageService {
-  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   static SharedPreferences? _sharedPreferences;
 
   /// INITIALIZE STORAGE SERVICE

@@ -21,7 +21,8 @@ class ChatListWidget extends StatelessWidget {
                 Divider(color: Colors.grey.shade300, height: 1),
             itemBuilder: (_, index) => ChatListItem(chat: state.chats[index]),
           ),
-          if (state.isSyncing) Positioned(bottom: 30.h, child: SyncWidget()),
+          if (state.isSyncing)
+            Positioned(bottom: 30.h, child: const SyncWidget()),
         ],
       ),
     );

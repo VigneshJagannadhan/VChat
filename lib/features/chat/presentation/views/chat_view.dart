@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -77,7 +78,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ChatViewAppBar(
+      appBar: const ChatViewAppBar(
         name: 'Jake Doe',
         lastSeen: 'Last seen on 12:00 PM',
       ),
@@ -114,7 +115,7 @@ class _ChatViewState extends State<ChatView> {
               );
             },
           ),
-          Expanded(child: ChatViewMessageBody()),
+          const Expanded(child: ChatViewMessageBody()),
           ChatViewBottomNav(
             messageController: _messageController,
             chatId: widget.chatId,

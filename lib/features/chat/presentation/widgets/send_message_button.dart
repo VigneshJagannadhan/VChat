@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
@@ -20,7 +19,7 @@ class SendMessageButton extends StatelessWidget {
         radius: 25.r,
         child: SvgPicture.asset(
           AppConstants.sendSvg,
-          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           width: 24.w,
           height: 24.h,
         ),

@@ -34,7 +34,7 @@ class _AuthViewState extends State<AuthView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ValueListenableBuilder(
           valueListenable: _isLogin,
           builder: (context, value, _) {
@@ -132,7 +132,7 @@ class _AuthViewState extends State<AuthView> {
                         ),
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: Text('Forgot Password?'),
+                          child: const Text('Forgot Password?'),
                         ),
                       ),
                     ],

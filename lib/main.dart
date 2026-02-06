@@ -31,17 +31,17 @@ Future<void> main() async {
   await locator<PushNotificationService>().initialize();
   locator<SocketService>().connect();
 
-  runApp(const VigneshProject01());
+  runApp(const VChat());
 }
 
-class VigneshProject01 extends StatefulWidget {
-  const VigneshProject01({super.key});
+class VChat extends StatefulWidget {
+  const VChat({super.key});
 
   @override
-  State<VigneshProject01> createState() => _VigneshProject01State();
+  State<VChat> createState() => _VChatState();
 }
 
-class _VigneshProject01State extends State<VigneshProject01> {
+class _VChatState extends State<VChat> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

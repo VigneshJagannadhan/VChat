@@ -21,7 +21,7 @@ class ChatViewMessageBody extends StatelessWidget {
         }
 
         if (state is ChatDetailLoading) {
-          return CustomLoaderWidget();
+          return const CustomLoaderWidget();
         }
 
         if (state is ChatDetailLoaded) {

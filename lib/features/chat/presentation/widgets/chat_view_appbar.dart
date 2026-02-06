@@ -17,7 +17,7 @@ class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           CircleAvatar(
             radius: 20.r,
-            child: Icon(Icons.person, color: Colors.white),
+            child: const Icon(Icons.person, color: Colors.white),
           ),
           SizedBox(width: 10.w),
           Column(

@@ -16,9 +16,9 @@ class SyncWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Syncing...'),
+          const Text('Syncing...'),
           SizedBox(width: 10.w),
-          CupertinoActivityIndicator(),
+          const CupertinoActivityIndicator(),
         ],
       ),
     );

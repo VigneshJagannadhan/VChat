@@ -31,7 +31,7 @@ class CustomPasswordField extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             label: Text(label, style: AppStyles.ts16W400cBlack),
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
 
             suffixIcon: GestureDetector(
               onTap: () {

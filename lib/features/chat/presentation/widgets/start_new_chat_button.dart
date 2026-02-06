@@ -15,7 +15,7 @@ class StartNewChatButton extends StatelessWidget {
         context: context,
         route: UserListView.route,
       ),
-      child: Icon(Icons.add, color: Colors.white),
+      child: const Icon(Icons.add, color: Colors.white),
     );
   }
 }

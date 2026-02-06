@@ -12,15 +12,15 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     /// SPLASH SCREEN
     case SplashView.route:
-      return MaterialPageRoute(builder: (context) => SplashView());
+      return MaterialPageRoute(builder: (context) => const SplashView());
 
     /// AUTH SCREEN
     case AuthView.route:
-      return MaterialPageRoute(builder: (context) => AuthView());
+      return MaterialPageRoute(builder: (context) => const AuthView());
 
     /// CHAT LIST SCREEN / HOME SCREEN
     case ChatListView.route:
-      return MaterialPageRoute(builder: (context) => ChatListView());
+      return MaterialPageRoute(builder: (context) => const ChatListView());
 
     /// CHAT DETAIL SCREEN
     case ChatView.route:
@@ -31,11 +31,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     /// USER PROFILE SCREEN
     case UserProfileView.route:
-      return MaterialPageRoute(builder: (context) => UserProfileView());
+      return MaterialPageRoute(builder: (context) => const UserProfileView());
 
     /// USER LIST SCREEN
     case UserListView.route:
-      return MaterialPageRoute(builder: (context) => UserListView());
+      return MaterialPageRoute(builder: (context) => const UserListView());
 
     /// DEFAULT UNKNOWN SCREEN
     default:

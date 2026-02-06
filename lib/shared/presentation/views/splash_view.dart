@@ -56,7 +56,7 @@ class _SplashViewState extends State<SplashView> {
               style: AppStyles.ts24W700cBlack,
             ),
             SizedBox(height: 20.h),
-            CupertinoActivityIndicator(),
+            const CupertinoActivityIndicator(),
           ],
         ),
       ),

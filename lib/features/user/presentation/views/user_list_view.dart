@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,7 +111,7 @@ class UserListItem extends StatelessWidget {
     return ListTile(
       title: Text(user.name ?? ''),
       subtitle: Text(user.email ?? ''),
-      leading: CircleAvatar(),
+      leading: const CircleAvatar(),
       trailing: ValueListenableBuilder(
         valueListenable: isLoading,
         builder: (context, value, child) {

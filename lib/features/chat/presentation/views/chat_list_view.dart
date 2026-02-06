@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -116,7 +117,7 @@ class _ChatListViewState extends State<ChatListView> {
                   );
                 }
                 if (state is ChatListLoading) {
-                  return CustomLoaderWidget();
+                  return const CustomLoaderWidget();
                 }
 
                 if (state is ChatListLoaded) {
@@ -137,7 +138,7 @@ class _ChatListViewState extends State<ChatListView> {
           ],
         ),
 
-        floatingActionButton: StartNewChatButton(),
+        floatingActionButton: const StartNewChatButton(),
       ),
     );
   }

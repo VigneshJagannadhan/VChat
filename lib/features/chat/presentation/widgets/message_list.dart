@@ -42,7 +42,7 @@ class MessageList extends StatelessWidget {
             },
           ),
         ),
-        if (state.isTyping) TypingMessageBubble(),
+        if (state.isTyping) const TypingMessageBubble(),
       ],
     );
   }
@@ -55,7 +55,7 @@ class MessageList extends StatelessWidget {
   }
 
   Widget _buildDateHeader(BuildContext context, DateTime? date) {
-    if (date == null) return SizedBox.shrink();
+    if (date == null) return const SizedBox.shrink();
     final localDate = date.toLocal();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);

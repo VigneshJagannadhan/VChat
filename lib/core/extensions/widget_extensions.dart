@@ -12,7 +12,7 @@ extension WidgetExtensions on Widget {
             child: Center(child: Text(text, style: AppStyles.ts16W400cBlack)),
           )
         : isLoading
-        ? Expanded(child: Center(child: CupertinoActivityIndicator()))
+        ? const Expanded(child: Center(child: CupertinoActivityIndicator()))
         : this;
   }
 }

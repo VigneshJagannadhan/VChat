@@ -68,5 +68,5 @@ ThemeData get theme => ThemeData(
     backgroundColor: AppColors.darkBackground,
   ),
 
-  cardTheme: CardThemeData(color: AppColors.darkBackground),
+  cardTheme: const CardThemeData(color: AppColors.darkBackground),
 );

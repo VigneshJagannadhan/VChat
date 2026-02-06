@@ -24,7 +24,7 @@ class CustomErrorWidget extends StatelessWidget {
               width: 50.h,
               height: 50.h,
               AppConstants.errorSvg,
-              colorFilter: ColorFilter.mode(Colors.red, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),
             ),
             SizedBox(height: 10.h),
             Text(message, style: AppStyles.ts14W400cBlack),

@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vignesh_project_01/core/utils/enums.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/message_entity.dart';
@@ -8,7 +9,8 @@ import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail
 class ChatDetailCubit extends Cubit<ChatDetailState> {
   final ChatRepository chatRepository;
 
-  ChatDetailCubit({required this.chatRepository}) : super(ChatDetailInitial()) {
+  ChatDetailCubit({required this.chatRepository})
+    : super(const ChatDetailInitial()) {
     log('ChatDetailCubit created: $hashCode');
   }
 
@@ -16,7 +18,7 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
   String? currentChatRoomId;
 
   Future<void> getChatDetail({required String id}) async {
-    emit(ChatDetailLoading());
+    emit(const ChatDetailLoading());
 
     final localResult = chatRepository.getChatDetail(id: id);
     localResult.fold((failure) => null, (response) {
@@ -149,6 +151,6 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
   }
 
   void reset() {
-    emit(ChatDetailInitial());
+    emit(const ChatDetailInitial());
   }
 }

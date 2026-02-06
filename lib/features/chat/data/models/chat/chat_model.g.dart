@@ -25,9 +25,9 @@ ChatModel _$ChatModelFromJson(Map<String, dynamic> json) => ChatModel(
 
 Map<String, dynamic> _$ChatModelToJson(ChatModel instance) => <String, dynamic>{
   '_id': instance.id,
-  'participants': instance.participants,
+  'participants': instance.participants?.map((e) => e.toJson()).toList(),
   'createdAt': instance.createdAt?.toIso8601String(),
   'updatedAt': instance.updatedAt?.toIso8601String(),
   'v': instance.v,
-  'lastMessage': instance.lastMessage,
+  'lastMessage': instance.lastMessage?.toJson(),
 };

@@ -5,6 +5,7 @@ import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
 import 'package:vignesh_project_01/core/helpers/app_lifecycle_helper.dart';
 import 'package:vignesh_project_01/core/helpers/navigation_helper.dart';
+import 'package:vignesh_project_01/core/services/hive_service.dart';
 import 'package:vignesh_project_01/core/services/push_notification_service.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
@@ -19,6 +20,7 @@ import 'package:vignesh_project_01/shared/presentation/views/splash_view.dart';
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository authRepository;
   final StorageService storageService;
+  final HiveService hiveService;
   final SocketService socketService;
 
   AppLifecycleHelper? lifecycleHelper;
@@ -27,6 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
     required this.fcmRepository,
     required this.authRepository,
     required this.storageService,
+    required this.hiveService,
     required this.socketService,
   }) : super(AuthInitial());
 
@@ -48,20 +51,23 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<void> _saveToken({
+  Future<bool> _saveToken({
     required AuthModel response,
     required BuildContext context,
   }) async {
+    var fcmToken = await locator<PushNotificationService>().getFcmToken();
+    // if (fcmToken == null) return false;
+    await saveToken(token: fcmToken ?? "");
+
     await storageService.saveAccessToken(token: response.token ?? "");
     await storageService.saveRefreshToken(token: response.token ?? "");
     await storageService.saveUserId(id: response.id ?? "");
     await storageService.saveUserEmail(email: response.email ?? "");
     socketService.connect();
-    var fcmToken = await locator<PushNotificationService>().getFcmToken();
-    await saveToken(token: fcmToken ?? "");
 
     lifecycleHelper = AppLifecycleHelper();
     lifecycleHelper?.start();
+    return true;
   }
 
   Future<void> register({
@@ -80,7 +86,9 @@ class AuthCubit extends Cubit<AuthState> {
       response,
     ) async {
       emit(AuthSuccess());
-      await _saveToken(response: response, context: context);
+      bool success = await _saveToken(response: response, context: context);
+      if (!success) return;
+
       if (!context.mounted) return;
       bool? result = await showGeneralPopup(
         context: context,
@@ -116,8 +124,13 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthFailure(failure: error));
       },
       (response) async {
+        bool success = await _saveToken(response: response, context: context);
+        if (!success) {
+          emit(AuthFailure(failure: Failure(message: 'FCM Token Error')));
+          return;
+        }
+
         emit(AuthSuccess());
-        await _saveToken(response: response, context: context);
         if (!context.mounted) return;
         NavigationHelper.pushReplacementNamed(
           context: context,
@@ -131,6 +144,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     await removeToken();
     await storageService.clearAll();
+    await hiveService.clearAll();
     lifecycleHelper?.dispose();
     emit(AuthInitial());
     if (!context.mounted) return;

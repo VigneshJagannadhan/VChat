@@ -9,10 +9,22 @@ class UserCubit extends Cubit<UserStates> {
 
   void getUserDetail() async {
     emit(UserLoading());
-    var result = await userRepository.getProfileDetail();
-    result.fold(
-      (error) => emit(UserFailure(error)),
-      (response) => emit(UserLoaded(response)),
+
+    var localResult = userRepository.getProfileDetail();
+
+    localResult.fold(
+      (failure) => null,
+      (response) => emit(UserLoaded(user: response, isSyncing: true)),
     );
+
+    var result = await userRepository.syncProfileDetail();
+    result.fold((error) {
+      if (state is UserLoaded) {
+        final currentState = state as UserLoaded;
+        emit(UserLoaded(user: currentState.user, isSyncing: false));
+      } else {
+        emit(UserFailure(error));
+      }
+    }, (response) => emit(UserLoaded(user: response, isSyncing: false)));
   }
 }

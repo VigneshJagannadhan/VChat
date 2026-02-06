@@ -9,10 +9,28 @@ class ChatCubit extends Cubit<ChatListState> {
 
   Future<void> getChatList({String? search}) async {
     emit(ChatListLoading());
-    final result = await chatRepository.getChatList(search: search);
-    result.fold((failure) => emit(ChatListFailure(failure)), (response) {
-      emit(ChatListLoaded(response.chats ?? []));
+
+    final result = chatRepository.getChatList(search: search);
+
+    result.fold((failure) => null, (response) {
+      emit(ChatListLoaded(isSyncing: true, chats: response.chats ?? []));
     });
+
+    var syncResult = await chatRepository.syncChatList();
+
+    syncResult.fold(
+      (failure) {
+        if (state is ChatListLoaded) {
+          final currentState = state as ChatListLoaded;
+          emit(ChatListLoaded(isSyncing: false, chats: currentState.chats));
+        } else {
+          emit(ChatListFailure(failure));
+        }
+      },
+      (response) {
+        emit(ChatListLoaded(isSyncing: false, chats: response.chats ?? []));
+      },
+    );
   }
 
   Future<String> getChatRoomId({required String id}) async {

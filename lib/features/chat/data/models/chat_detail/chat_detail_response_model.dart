@@ -4,18 +4,18 @@ import 'package:vignesh_project_01/features/chat/domain/entities/chat_detail_ent
 
 part 'chat_detail_response_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ChatDetailResponseModel {
-  final List<MessageModel> messages;
-  final int page;
-  final int pages;
-  final int total;
+  final List<MessageModel>? messages;
+  final int? page;
+  final int? pages;
+  final int? total;
 
   const ChatDetailResponseModel({
-    required this.messages,
-    required this.page,
-    required this.pages,
-    required this.total,
+    this.messages,
+    this.page,
+    this.pages,
+    this.total,
   });
 
   factory ChatDetailResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -23,9 +23,11 @@ class ChatDetailResponseModel {
 
   Map<String, dynamic> toJson() => _$ChatDetailResponseModelToJson(this);
 
-  ChatDetailEntity toEntity() {
+  ChatDetailEntity toEntity({required bool isFromApi}) {
     return ChatDetailEntity(
-      messages: messages.map((message) => message.toEntity()).toList(),
+      messages: messages
+          ?.map((message) => message.toEntity(isFromApi: isFromApi))
+          .toList(),
       page: page,
       pages: pages,
       total: total,

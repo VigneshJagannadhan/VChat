@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/routes/app_args.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/views/chat_view.dart';
-import 'package:vignesh_project_01/features/user/data/models/user/user_model.dart';
+import 'package:vignesh_project_01/features/user/domain/entities/user_entity.dart';
 import 'package:vignesh_project_01/features/user/presentation/cubits/user_list/user_list_cubit.dart';
 import 'package:vignesh_project_01/features/user/presentation/cubits/user_list/user_list_states.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
@@ -31,7 +30,7 @@ class _UserListViewState extends State<UserListView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((v) async {
       UserListCubit userProvider = context.read<UserListCubit>();
-      await userProvider.findUsers();
+      await userProvider.fetchUsers();
     });
   }
 
@@ -50,7 +49,7 @@ class _UserListViewState extends State<UserListView> {
               onChanged: (value) {
                 if (_debounce?.isActive ?? true) _debounce?.cancel();
                 _debounce = Timer(const Duration(milliseconds: 500), () {
-                  context.read<UserListCubit>().findUsers(search: value);
+                  context.read<UserListCubit>().fetchUsers(search: value);
                 });
               },
             ),
@@ -63,7 +62,7 @@ class _UserListViewState extends State<UserListView> {
                 if (state is UserListFailure) {
                   return CustomErrorWidget(
                     message: state.failure.message,
-                    onRetry: () => context.read<UserListCubit>().findUsers(
+                    onRetry: () => context.read<UserListCubit>().fetchUsers(
                       search: _searchController.text,
                     ),
                   );
@@ -103,13 +102,13 @@ class _UserListViewState extends State<UserListView> {
 class UserListItem extends StatelessWidget {
   UserListItem({super.key, required this.user});
 
-  final UserModel user;
+  final UserEntity user;
   final ValueNotifier<bool> isLoading = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(user.username ?? ''),
+      title: Text(user.name ?? ''),
       subtitle: Text(user.email ?? ''),
       leading: CircleAvatar(),
       trailing: ValueListenableBuilder(

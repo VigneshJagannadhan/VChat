@@ -3,26 +3,16 @@ import 'package:vignesh_project_01/core/constants/app_urls.dart';
 import 'package:vignesh_project_01/core/exceptions/failure.dart';
 import 'package:vignesh_project_01/core/services/api_service.dart';
 import 'package:vignesh_project_01/core/utils/safe_parse.dart';
+import 'package:vignesh_project_01/features/chat/data/data_sources/chat_data_sources/chat_data_source.dart';
 import 'package:vignesh_project_01/features/chat/data/models/chat/chat_model.dart';
 import 'package:vignesh_project_01/features/chat/data/models/chat_detail/chat_detail_response_model.dart';
 import 'package:vignesh_project_01/features/chat/data/models/chat_response/chat_response_model.dart';
 
-abstract class ChatDataSources {
-  Future<Either<Failure, ChatResponseModel>> getChatList({String? search});
-  Future<Either<Failure, ChatModel>> getChatRoomId({required String id});
-  Future<Either<Failure, ChatDetailResponseModel>> getChatDetail({
-    required String id,
-  });
-  Future<Either<Failure, ChatResponseModel>> sendMessage({
-    required String userId,
-    required String content,
-  });
-}
-
-class ChatDataSourcesImpl extends ChatDataSources {
+class ChatRemoteDataSourcesImpl extends ChatRemoteDataSource {
   ApiService apiService;
-  ChatDataSourcesImpl({required this.apiService});
+  ChatRemoteDataSourcesImpl({required this.apiService});
 
+  /// ---------------------- CHAT LIST ----------------------
   @override
   Future<Either<Failure, ChatResponseModel>> getChatList({
     String? search,
@@ -37,6 +27,7 @@ class ChatDataSourcesImpl extends ChatDataSources {
     );
   }
 
+  /// ---------------------- CHAT DETAIL ----------------------
   @override
   Future<Either<Failure, ChatDetailResponseModel>> getChatDetail({
     required String id,
@@ -49,6 +40,7 @@ class ChatDataSourcesImpl extends ChatDataSources {
     );
   }
 
+  /// ---------------------- GET CHAT ROOM ID ----------------------
   @override
   Future<Either<Failure, ChatModel>> getChatRoomId({required String id}) async {
     var result = await apiService.post(
@@ -61,6 +53,7 @@ class ChatDataSourcesImpl extends ChatDataSources {
     );
   }
 
+  /// ---------------------- SEND MESSAGE ----------------------
   @override
   Future<Either<Failure, ChatResponseModel>> sendMessage({
     required String userId,

@@ -1,77 +1,56 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
-import 'package:vignesh_project_01/core/services/update_service.dart';
 import 'package:vignesh_project_01/shared/domain/entities/update_entity.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/update_repository.dart';
 import 'package:vignesh_project_01/shared/presentation/cubits/update/update_states.dart';
 
 class UpdateCubit extends Cubit<UpdateStates> {
   UpdateRepository updateRepository;
-  UpdateService updateService;
+  StorageService storageService;
 
-  UpdateCubit({required this.updateRepository, required this.updateService})
+  UpdateCubit({required this.updateRepository, required this.storageService})
     : super(UpdateInitial());
 
   Future<void> checkForUpdate() async {
     emit(UpdateLoading());
 
-    // 1. Try to load from cache first
-    var cachedResult = updateRepository.getCachedUpdate();
-    cachedResult.fold(
-      (failure) => null, // Ignore cache missing on first run
-      (updateEntity) => checkIfOutdated(updateEntity),
-    );
+    // var cachedUpdate = updateRepository.getCachedUpdate();
+    // cachedUpdate.fold((failure) => null, (updateEntity) async {
+    //   checkIfOutdated(updateEntity, isSyncing: true);
+    // });
 
-    // 2. Sync from remote source
-    var syncResult = await updateRepository.syncUpdate();
-    syncResult.fold(
+    var result = await updateRepository.syncUpdate();
+    result.fold(
       (failure) {
-        // Only show error if we haven't successfully loaded from cache
-        if (state is! UpdateLoaded) {
+        if (state is UpdateLoaded) {
+          final currentState = state as UpdateLoaded;
+          emit(
+            UpdateLoaded(
+              updateEntity: currentState.updateEntity,
+              isUpdateAvailable: currentState.isUpdateAvailable,
+              isSyncing: false,
+            ),
+          );
+        } else {
           emit(UpdateFailure(failure: failure));
         }
       },
       (updateEntity) {
-        checkIfOutdated(updateEntity);
+        checkIfOutdated(updateEntity, isSyncing: false);
       },
     );
   }
 
-  void checkIfOutdated(UpdateEntity updateEntity) {
-    var currentVersion = locator<StorageService>().fetchVersion() ?? '0';
-    var isUpdateAvailable = isOutdated(
-      currentVersion,
-      updateEntity.latestVersion ?? '0',
+  void checkIfOutdated(UpdateEntity updateEntity, {required bool isSyncing}) {
+    var isUpdateAvailable = updateEntity.isVersionOutdated(
+      currentVersion: storageService.fetchVersion() ?? '0',
     );
     emit(
       UpdateLoaded(
         updateEntity: updateEntity,
         isUpdateAvailable: isUpdateAvailable,
+        isSyncing: isSyncing,
       ),
     );
-  }
-
-  bool isOutdated(String current, String latest) {
-    List<int> parseVersion(String v) {
-      final parts = v.split('.');
-      final nums = parts.map((p) {
-        final m = RegExp(r'\d+').firstMatch(p.trim());
-        return m != null ? int.tryParse(m.group(0)!) ?? 0 : 0;
-      }).toList();
-      while (nums.length < 3) {
-        nums.add(0);
-      }
-      return nums;
-    }
-
-    final c = parseVersion(current);
-    final l = parseVersion(latest);
-
-    for (int i = 0; i < 3; i++) {
-      if (c[i] < l[i]) return true;
-      if (c[i] > l[i]) return false;
-    }
-    return false;
   }
 }

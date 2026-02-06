@@ -13,7 +13,10 @@ class UpdateLocalDataSourceImpl implements UpdateLocalDataSource {
   @override
   Either<Failure, UpdateModel> checkForUpdate() {
     try {
-      final result = hiveService.get(route: AppUrls.checkForUpdate);
+      final result = hiveService.get(
+        route: AppUrls.checkForUpdate,
+        box: HiveService.appCacheBox,
+      );
       if (result == null) {
         return Left(Failure(message: "No cache found"));
       }
@@ -27,6 +30,7 @@ class UpdateLocalDataSourceImpl implements UpdateLocalDataSource {
   Future<void> saveUpdate({required UpdateModel updateModel}) async {
     await hiveService.save(
       route: AppUrls.checkForUpdate,
+      box: HiveService.appCacheBox,
       value: updateModel.toJson(),
     );
   }

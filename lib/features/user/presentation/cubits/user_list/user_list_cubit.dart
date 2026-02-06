@@ -7,14 +7,30 @@ class UserListCubit extends Cubit<UserListState> {
 
   UserListCubit({required this.userRepository}) : super(UserListInitial());
 
-  Future<void> findUsers({String? search}) async {
+  Future<void> fetchUsers({String? search}) async {
     emit(UserListLoading());
 
-    final result = await userRepository.getUserList(search: search);
+    final localResult = userRepository.fetchUserList(search: search);
 
-    result.fold((failure) => emit(UserListFailure(failure)), (response) {
-      emit(UserListLoaded(response.users ?? []));
+    localResult.fold((failure) => null, (response) {
+      emit(UserListLoaded(users: response.users ?? [], isSyncing: true));
     });
+
+    final result = await userRepository.syncUserList(search: search);
+
+    result.fold(
+      (failure) {
+        if (state is UserListLoaded) {
+          final currentState = state as UserListLoaded;
+          emit(UserListLoaded(users: currentState.users, isSyncing: false));
+        } else {
+          emit(UserListFailure(failure));
+        }
+      },
+      (response) {
+        emit(UserListLoaded(users: response.users ?? [], isSyncing: false));
+      },
+    );
   }
 
   void reset() {

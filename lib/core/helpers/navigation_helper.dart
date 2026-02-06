@@ -4,8 +4,9 @@ class NavigationHelper {
   static Future<void> pushNamed({
     required BuildContext context,
     required String route,
+    Object? arguments,
   }) {
-    return Navigator.of(context).pushNamed(route);
+    return Navigator.of(context).pushNamed(route, arguments: arguments);
   }
 
   static Future<void> push({

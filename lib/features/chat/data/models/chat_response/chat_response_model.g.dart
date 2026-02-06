@@ -18,7 +18,7 @@ ChatResponseModel _$ChatResponseModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatResponseModelToJson(ChatResponseModel instance) =>
     <String, dynamic>{
-      'chats': instance.chats,
+      'chats': instance.chats?.map((e) => e.toJson()).toList(),
       'page': instance.page,
       'pages': instance.pages,
       'total': instance.total,

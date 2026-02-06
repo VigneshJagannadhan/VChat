@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:vignesh_project_01/features/chat/data/models/sender/sender_model.dart';
+import 'package:vignesh_project_01/features/chat/domain/entities/last_message_entity.dart';
 
 part 'last_message_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LastMessageModel {
   String? id;
   SenderModel? sender;
@@ -29,4 +30,11 @@ class LastMessageModel {
       _$LastMessageModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LastMessageModelToJson(this);
+
+  LastMessageEntity toEntity() => LastMessageEntity(
+    id: id,
+    content: content,
+    chat: chat,
+    createdAt: createdAt,
+  );
 }

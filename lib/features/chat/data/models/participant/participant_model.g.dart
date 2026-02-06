@@ -8,7 +8,7 @@ part of 'participant_model.dart';
 
 ParticipantModel _$ParticipantModelFromJson(Map<String, dynamic> json) =>
     ParticipantModel(
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
       username: json['username'] as String?,
       email: json['email'] as String?,
       createdAt: json['createdAt'] == null
@@ -22,7 +22,7 @@ ParticipantModel _$ParticipantModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ParticipantModelToJson(ParticipantModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'username': instance.username,
       'email': instance.email,
       'createdAt': instance.createdAt?.toIso8601String(),

@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/constants/app_validators.dart';
+import 'package:vignesh_project_01/core/themes/app_colors.dart';
+import 'package:vignesh_project_01/core/themes/app_styles.dart';
 import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_states.dart';
 import 'package:vignesh_project_01/shared/others/snackbars/general_snackbar.dart';
@@ -49,6 +54,15 @@ class _AuthViewState extends State<AuthView> {
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   SizedBox(height: 30.h),
+                  Align(
+                    alignment: Alignment.center,
+                    child: ProfileImageWidget(
+                      onSelected: (file) {
+                        print('File : ${file?.path}');
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
                   if (!value)
                     VkTextFormField(
                       label: "Name",
@@ -142,6 +156,86 @@ class _AuthViewState extends State<AuthView> {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class ProfileImageWidget extends StatefulWidget {
+  const ProfileImageWidget({super.key, required this.onSelected});
+
+  final Function(File? file) onSelected;
+
+  @override
+  State<ProfileImageWidget> createState() => _ProfileImageWidgetState();
+}
+
+class _ProfileImageWidgetState extends State<ProfileImageWidget> {
+  final ValueNotifier<File?> _selectedImage = ValueNotifier(null);
+
+  @override
+  void dispose() {
+    _selectedImage.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+        );
+
+        if (result != null) {
+          final path = result.files.single.path;
+          if (path == null) return;
+          final file = File(path);
+          _selectedImage.value = file;
+          widget.onSelected(file);
+        }
+      },
+
+      child: ValueListenableBuilder(
+        valueListenable: _selectedImage,
+        builder: (context, image, child) {
+          return Stack(
+            children: [
+              CircleAvatar(
+                radius: 55.r,
+                backgroundColor: AppColors.primaryColor,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.cWhite,
+                  backgroundImage: image != null ? FileImage(image) : null,
+                  radius: 50.r,
+                  child: image != null
+                      ? null
+                      : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Text(
+                            'Click to Pick an image',
+                            style: AppStyles.ts12W400cBlack,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.cWhite,
+                  radius: 15.r,
+                  child: Icon(
+                    image != null ? Icons.edit : Icons.add_a_photo,
+                    size: 15.sp,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

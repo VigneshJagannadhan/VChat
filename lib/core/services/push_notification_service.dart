@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -100,7 +101,7 @@ class PushNotificationService {
     );
 
     await _localNotifications.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: _onLocalNotificationTap,
     );
   }
@@ -165,10 +166,10 @@ class PushNotificationService {
     );
 
     await _localNotifications.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title,
-      body,
-      notificationDetails,
+      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title: title,
+      body: body,
+      notificationDetails: notificationDetails,
       payload: payload?.toString(),
     );
   }

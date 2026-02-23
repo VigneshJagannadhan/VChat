@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/helpers/navigation_helper.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
 import 'package:vignesh_project_01/core/themes/app_styles.dart';
 import 'package:vignesh_project_01/features/auth/presentation/views/auth_view.dart';
+import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
+import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_cubit.dart';
+import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/views/chat_list_view.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
 
@@ -30,6 +34,9 @@ class _SplashViewState extends State<SplashView> {
       var token = await storageService.fetchAccessToken();
       if (token != null) {
         if (!mounted) return;
+        await fetchAllChats();
+
+        if (!mounted) return;
         NavigationHelper.pushReplacementNamed(
           context: context,
           route: ChatListView.route,
@@ -42,6 +49,24 @@ class _SplashViewState extends State<SplashView> {
         );
       }
     });
+  }
+
+  Future<void> fetchAllChats() async {
+    ChatCubit chatCubit = context.read<ChatCubit>();
+    ChatDetailCubit chatDetailCubit = context.read<ChatDetailCubit>();
+    await chatCubit.getChatList();
+
+    if (chatCubit.state is ChatListLoaded) {
+      var chats = (chatCubit.state as ChatListLoaded).chats;
+
+      await Future.wait<void>(
+        List.generate(
+          chats.length,
+          (index) async =>
+              await chatDetailCubit.getChatDetail(id: chats[index].id ?? ""),
+        ),
+      );
+    }
   }
 
   @override

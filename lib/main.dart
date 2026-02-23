@@ -54,6 +54,7 @@ class _VChatState extends State<VChat> {
             return MaterialApp(
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
+              debugShowCheckedModeBanner: false,
               locale: state.locale,
               theme: theme,
               onGenerateRoute: onGenerateRoute,

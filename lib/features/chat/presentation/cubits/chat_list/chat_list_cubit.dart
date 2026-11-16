@@ -7,22 +7,32 @@ class ChatCubit extends Cubit<ChatListState> {
 
   ChatCubit({required this.chatRepository}) : super(ChatListInitial());
 
+  /// Bumped on every [getChatList] call so results from an older, slower
+  /// request can't overwrite newer ones.
+  int _latestRequest = 0;
+
+  /// Shows cached chats (filtered by [search]) immediately, then the
+  /// server's results. Keeps the current list on screen while searching
+  /// instead of switching to the full-screen loader.
   Future<void> getChatList({String? search}) async {
-    emit(ChatListLoading());
+    final request = ++_latestRequest;
 
-    final result = chatRepository.getChatList(search: search);
+    chatRepository.getChatList(search: search).fold(
+      (_) {
+        if (state is! ChatListLoaded) emit(ChatListLoading());
+      },
+      (response) =>
+          emit(ChatListLoaded(isSyncing: true, chats: response.chats ?? [])),
+    );
 
-    result.fold((failure) => null, (response) {
-      emit(ChatListLoaded(isSyncing: true, chats: response.chats ?? []));
-    });
-
-    var syncResult = await chatRepository.syncChatList();
+    final syncResult = await chatRepository.syncChatList(search: search);
+    if (request != _latestRequest) return;
 
     syncResult.fold(
       (failure) {
-        if (state is ChatListLoaded) {
-          final currentState = state as ChatListLoaded;
-          emit(ChatListLoaded(isSyncing: false, chats: currentState.chats));
+        final current = state;
+        if (current is ChatListLoaded) {
+          emit(ChatListLoaded(isSyncing: false, chats: current.chats));
         } else {
           emit(ChatListFailure(failure));
         }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vignesh_project_01/core/themes/app_colors.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 
 class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ChatViewAppBar({super.key, required this.name, required this.lastSeen});
@@ -12,19 +11,15 @@ class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.darkBackground,
       title: Row(
         children: [
-          CircleAvatar(
-            radius: 20.r,
-            child: const Icon(Icons.person, color: Colors.white),
-          ),
+          CircleAvatar(radius: 20.r, child: const Icon(Icons.person)),
           SizedBox(width: 10.w),
           Column(
             crossAxisAlignment: .start,
             children: [
-              Text(name, style: AppStyles.ts16W400cWhite),
-              Text(lastSeen, style: AppStyles.ts10W400cWhite),
+              Text(name, style: context.textTheme.titleMedium),
+              Text(lastSeen, style: context.textTheme.labelSmall),
             ],
           ),
         ],

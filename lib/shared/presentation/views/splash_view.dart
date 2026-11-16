@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/helpers/navigation_helper.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/features/auth/presentation/views/auth_view.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_cubit.dart';
@@ -78,7 +78,7 @@ class _SplashViewState extends State<SplashView> {
           children: [
             Text(
               AppLocalizations.of(context)!.appName,
-              style: AppStyles.ts24W700cBlack,
+              style: context.textTheme.headlineSmall,
             ),
             SizedBox(height: 20.h),
             const CupertinoActivityIndicator(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/message_bubble.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/typing_message_bubble.dart';
@@ -75,14 +76,13 @@ class MessageList extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10.r),
+      decoration: ShapeDecoration(
+        color: context.colors.surfaceContainerHighest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.r),
+        ),
       ),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 12.sp, color: Colors.black54),
-      ),
+      child: Text(text, style: context.textTheme.labelMedium),
     );
   }
 }

@@ -56,7 +56,7 @@ class _VChatState extends State<VChat> {
               supportedLocales: AppLocalizations.supportedLocales,
               debugShowCheckedModeBanner: false,
               locale: state.locale,
-              theme: theme,
+              theme: AppTheme.dark,
               onGenerateRoute: onGenerateRoute,
             );
           },

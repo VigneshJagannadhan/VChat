@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 
 class CustomSwitchWithLabel extends StatelessWidget {
   const CustomSwitchWithLabel({
@@ -19,15 +19,21 @@ class CustomSwitchWithLabel extends StatelessWidget {
     return Container(
       width: 1.sw,
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: Colors.grey),
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.r),
+          side: BorderSide(color: context.colors.outline),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: Theme.of(context).textTheme.bodyLarge),
-          CupertinoSwitch(value: value, onChanged: onChanged),
+          Text(label, style: context.textTheme.bodyLarge),
+          CupertinoSwitch(
+            value: value,
+            onChanged: onChanged,
+            activeTrackColor: context.colors.primary,
+          ),
         ],
       ),
     );

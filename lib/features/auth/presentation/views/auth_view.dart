@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/constants/app_validators.dart';
-import 'package:vignesh_project_01/core/themes/app_colors.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_states.dart';
 import 'package:vignesh_project_01/shared/others/snackbars/general_snackbar.dart';
@@ -51,7 +50,7 @@ class _AuthViewState extends State<AuthView> {
                 children: [
                   Text(
                     value ? 'Login' : 'Register',
-                    style: Theme.of(context).textTheme.headlineLarge,
+                    style: context.textTheme.headlineLarge,
                   ),
                   SizedBox(height: 30.h),
                   Align(
@@ -135,6 +134,9 @@ class _AuthViewState extends State<AuthView> {
                             value
                                 ? 'Do not have an account?'
                                 : 'Already have an account?',
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colors.tertiary,
+                            ),
                           ),
                         ),
                       ),
@@ -146,7 +148,12 @@ class _AuthViewState extends State<AuthView> {
                         ),
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: const Text('Forgot Password?'),
+                          child: Text(
+                            'Forgot Password?',
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colors.tertiary,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -199,37 +206,43 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
       child: ValueListenableBuilder(
         valueListenable: _selectedImage,
         builder: (context, image, child) {
+          final colors = context.colors;
           return Stack(
             children: [
-              CircleAvatar(
-                radius: 55.r,
-                backgroundColor: AppColors.primaryColor,
-                child: CircleAvatar(
-                  backgroundColor: AppColors.cWhite,
-                  backgroundImage: image != null ? FileImage(image) : null,
-                  radius: 50.r,
-                  child: image != null
-                      ? null
-                      : Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: Text(
-                            'Click to Pick an image',
-                            style: AppStyles.ts12W400cBlack,
-                            textAlign: TextAlign.center,
+              DecoratedBox(
+                decoration: ShapeDecoration(
+                  shape: const CircleBorder(),
+                  gradient: context.chatColors.sentBubbleGradient,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(5.r),
+                  child: CircleAvatar(
+                    backgroundColor: colors.surfaceContainerHigh,
+                    backgroundImage: image != null ? FileImage(image) : null,
+                    radius: 50.r,
+                    child: image != null
+                        ? null
+                        : Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            child: Text(
+                              'Click to Pick an image',
+                              style: context.textTheme.bodySmall,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
+                  ),
                 ),
               ),
               Positioned(
                 bottom: 0,
                 right: 0,
                 child: CircleAvatar(
-                  backgroundColor: AppColors.cWhite,
+                  backgroundColor: colors.primary,
                   radius: 15.r,
                   child: Icon(
                     image != null ? Icons.edit : Icons.add_a_photo,
                     size: 15.sp,
-                    color: AppColors.primaryColor,
+                    color: colors.onPrimary,
                   ),
                 ),
               ),

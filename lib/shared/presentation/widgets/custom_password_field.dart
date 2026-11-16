@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 
 class CustomPasswordField extends StatelessWidget {
   CustomPasswordField({
@@ -30,7 +30,7 @@ class CustomPasswordField extends StatelessWidget {
           obscureText: obscureText,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
-            label: Text(label, style: AppStyles.ts16W400cBlack),
+            label: Text(label),
             border: const OutlineInputBorder(),
 
             suffixIcon: GestureDetector(
@@ -40,7 +40,9 @@ class CustomPasswordField extends StatelessWidget {
               },
               child: Icon(
                 obscureText ? Icons.visibility_off : Icons.visibility,
-                color: obscureText ? Colors.grey : Colors.blue,
+                color: obscureText
+                    ? context.colors.onSurfaceVariant
+                    : context.colors.tertiary,
               ),
             ),
           ),

@@ -15,6 +15,7 @@ import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_s
 import 'package:vignesh_project_01/features/chat/presentation/views/chat_list_view.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/fcm_repository.dart';
 import 'package:vignesh_project_01/shared/others/popups/general_popup.dart';
+import 'package:vignesh_project_01/shared/others/providers/token_provider.dart';
 import 'package:vignesh_project_01/shared/presentation/views/splash_view.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -22,6 +23,7 @@ class AuthCubit extends Cubit<AuthState> {
   final StorageService storageService;
   final HiveService hiveService;
   final SocketService socketService;
+  final TokenProvider tokenProvider;
 
   AppLifecycleHelper? lifecycleHelper;
 
@@ -31,6 +33,7 @@ class AuthCubit extends Cubit<AuthState> {
     required this.storageService,
     required this.hiveService,
     required this.socketService,
+    required this.tokenProvider,
   }) : super(AuthInitial());
 
   FcmRepository fcmRepository;
@@ -60,6 +63,7 @@ class AuthCubit extends Cubit<AuthState> {
     await saveToken(token: fcmToken ?? "");
 
     await storageService.saveAccessToken(token: response.token ?? "");
+    tokenProvider.updateToken(response.token ?? "");
     await storageService.saveRefreshToken(token: response.token ?? "");
     await storageService.saveUserId(id: response.id ?? "");
     await storageService.saveUserEmail(email: response.email ?? "");
@@ -144,6 +148,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     await removeToken();
     await storageService.clearAll();
+    tokenProvider.clear();
     await hiveService.clearAll();
     lifecycleHelper?.dispose();
     emit(AuthInitial());

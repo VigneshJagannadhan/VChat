@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
 import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/body_text.dart';
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
   required BuildContext context,
@@ -12,13 +13,17 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
 }) => ScaffoldMessenger.of(context).showSnackBar(
   SnackBar(
     behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.w),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppRadius.xl),
+    ),
+    padding: const EdgeInsets.symmetric(
+      horizontal: AppSpacing.xl,
+      vertical: AppSpacing.lg,
+    ),
     content: Row(
       children: [
-        SizedBox(
-          width: 40.w,
-          height: 40.h,
+        SizedBox.square(
+          dimension: AppSizes.iconLg,
           child: SvgPicture.asset(
             isFailure ? AppConstants.errorSvg : AppConstants.successSvg,
             colorFilter: ColorFilter.mode(
@@ -27,9 +32,9 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
             ),
           ),
         ),
-        SizedBox(width: 10.w),
+        const SizedBox(width: AppSpacing.md),
         Expanded(
-          child: Text(
+          child: BodyText.medium(
             errorMessage ?? AppLocalizations.of(context)!.generalErrorMessage,
           ),
         ),

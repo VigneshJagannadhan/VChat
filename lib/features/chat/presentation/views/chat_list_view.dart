@@ -1,14 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/storage_service.dart';
 import 'package:vignesh_project_01/core/services/update_service.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_states.dart';
-import 'package:vignesh_project_01/features/chat/presentation/views/test.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/chat_list_widget.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/start_new_chat_button.dart';
 import 'package:vignesh_project_01/features/user/presentation/views/user_profile_view.dart';
@@ -17,9 +14,13 @@ import 'package:vignesh_project_01/shared/others/popups/update_app_version_popup
 import 'package:vignesh_project_01/shared/others/snackbars/general_snackbar.dart';
 import 'package:vignesh_project_01/shared/presentation/cubits/update/update_cubit.dart';
 import 'package:vignesh_project_01/shared/presentation/cubits/update/update_states.dart';
-import 'package:vignesh_project_01/shared/presentation/widgets/custom_empty_list_widget.dart';
-import 'package:vignesh_project_01/shared/presentation/widgets/custom_error_widget.dart';
-import 'package:vignesh_project_01/shared/presentation/widgets/custom_loader_widget.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_app_bar.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_empty_view.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_error_view.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_loader.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_scaffold.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_sync_banner.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_text_field.dart';
 
 class ChatListView extends StatefulWidget {
   static const String route = '/home_view';
@@ -31,40 +32,39 @@ class ChatListView extends StatefulWidget {
 
 class _ChatListViewState extends State<ChatListView> {
   final TextEditingController _searchController = TextEditingController();
-  Timer? _debounce;
-  late ChatCubit chatProvider;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((v) async {
-      chatProvider = context.read<ChatCubit>();
-      StorageService storageService = locator<StorageService>();
-      UpdateService updateService = locator<UpdateService>();
-      UpdateCubit updateCubit = context.read<UpdateCubit>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final chatCubit = context.read<ChatCubit>();
+      final updateCubit = context.read<UpdateCubit>();
+      final storageService = locator<StorageService>();
+      final updateService = locator<UpdateService>();
 
-      var version = await updateService.findVersion();
+      final version = await updateService.findVersion();
       await storageService.saveVersion(version: version);
       await Future.wait<void>([
         updateCubit.checkForUpdate(),
-        chatProvider.getChatList(),
+        chatCubit.getChatList(),
       ]);
     });
   }
 
   @override
   void dispose() {
-    _debounce?.cancel();
     _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocListener<UpdateCubit, UpdateStates>(
       listener: (context, state) {
         if (state is UpdateLoaded && state.isUpdateAvailable) {
-          var isOptionalUpdate = !(state.updateEntity.forceUpdate ?? false);
+          final isOptionalUpdate = !(state.updateEntity.forceUpdate ?? false);
           showUpdateAppVersionPopup(
             context: context,
             isOptionalUpdate: isOptionalUpdate,
@@ -72,73 +72,66 @@ class _ChatListViewState extends State<ChatListView> {
           );
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.appTitle),
+      child: AppScaffold(
+        appBar: AppAppBar(
+          title: l10n.appTitle,
+          showBackButton: false,
           actions: [
             IconButton(
               icon: const Icon(Icons.settings),
+              tooltip: l10n.settingsButtonTooltip,
               onPressed: () =>
                   Navigator.of(context).pushNamed(UserProfileView.route),
             ),
           ],
         ),
+        banner: BlocBuilder<ChatCubit, ChatListState>(
+          builder: (context, state) => AppSyncBanner(
+            visible: state is ChatListLoaded && state.isSyncing,
+            message: l10n.syncingLabel,
+          ),
+        ),
+        floatingActionButton: const StartNewChatButton(),
         body: Column(
           children: [
-            SizedBox(height: 20.h),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: AkTextFormField(
+              padding: AppSpacing.screen,
+              child: AppTextField.search(
                 controller: _searchController,
-                label: AppLocalizations.of(context)!.searchLabel,
-                onChanged: (value) {
-                  if (_debounce?.isActive ?? false) _debounce?.cancel();
-                  _debounce = Timer(const Duration(milliseconds: 500), () {
-                    chatProvider.getChatList(search: value);
-                  });
+                label: l10n.searchLabel,
+                onChanged: (value) =>
+                    context.read<ChatCubit>().getChatList(search: value),
+              ),
+            ),
+            Expanded(
+              child: BlocConsumer<ChatCubit, ChatListState>(
+                listener: (context, state) {
+                  if (state is ChatListFailure) {
+                    showGeneralSnackbar(
+                      context: context,
+                      errorMessage: state.failure.message,
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return switch (state) {
+                    ChatListFailure(:final failure) => AppErrorView(
+                      message: failure.message,
+                      onRetry: () => context.read<ChatCubit>().getChatList(
+                        search: _searchController.text,
+                      ),
+                    ),
+                    ChatListLoading() => const AppLoader(),
+                    ChatListLoaded(:final chats) when chats.isEmpty =>
+                      AppEmptyView(message: l10n.noChatMessage),
+                    ChatListLoaded() => ChatListWidget(state: state),
+                    ChatListInitial() => const SizedBox.shrink(),
+                  };
                 },
               ),
             ),
-            SizedBox(height: 20.h),
-            BlocConsumer<ChatCubit, ChatListState>(
-              listener: (context, state) {
-                if (state is ChatListFailure) {
-                  showGeneralSnackbar(
-                    context: context,
-                    errorMessage: state.failure.message,
-                  );
-                }
-              },
-              builder: (context, state) {
-                if (state is ChatListFailure) {
-                  return CustomErrorWidget(
-                    message: state.failure.message,
-                    onRetry: () => context.read<ChatCubit>().getChatList(),
-                  );
-                }
-                if (state is ChatListLoading) {
-                  return const CustomLoaderWidget();
-                }
-
-                if (state is ChatListLoaded) {
-                  if (state.chats.isEmpty) {
-                    return Expanded(
-                      child: EmptyListWidget(
-                        text: AppLocalizations.of(context)!.noChatMessage,
-                      ),
-                    );
-                  }
-
-                  return ChatListWidget(state: state);
-                }
-
-                return const SizedBox.shrink();
-              },
-            ),
           ],
         ),
-
-        floatingActionButton: const StartNewChatButton(),
       ),
     );
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
-import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
-import 'package:vignesh_project_01/shared/presentation/widgets/primary_button.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_button.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/body_text.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/title_text.dart';
 
 Future<bool?> showGeneralPopup({
   required BuildContext context,
@@ -18,48 +20,38 @@ Future<bool?> showGeneralPopup({
   return await showDialog<bool?>(
     barrierDismissible: barrierDismissible,
     context: context,
-    builder: (context) => Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: .center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 10.h),
-            Text(
-              title ?? AppLocalizations.of(context)!.confirmDialogTitle,
-              style: context.textTheme.titleLarge,
-            ),
-            SizedBox(height: 20.h),
-            Lottie.asset(AppConstants.lottieError, height: 100.h),
-            SizedBox(height: 20.h),
-            Text(
-              message ?? 'Are you sure you want to perform this action?',
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colors.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20.h),
-            PrimaryButton(
-              onTap: () => Navigator.of(context).pop(true),
-              label:
-                  confirmLabel ?? AppLocalizations.of(context)!.okButtonLabel,
-            ),
-            if (!singleButton) SizedBox(height: 10.h),
-            if (!singleButton)
-              PrimaryButton(
-                onTap: () => Navigator.of(context).pop(false),
-                label:
-                    cancelLabel ??
-                    AppLocalizations.of(context)!.cancelButtonLabel,
-                color: context.colors.errorContainer,
-                foregroundColor: context.colors.onErrorContainer,
-              ),
-          ],
+    builder: (context) {
+      final l10n = AppLocalizations.of(context)!;
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xxl),
         ),
-      ),
-    ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: AppSpacing.lg,
+            children: [
+              TitleText.large(title ?? l10n.confirmDialogTitle),
+              Lottie.asset(AppConstants.lottieError, height: 100),
+              BodyText.medium(
+                message ?? l10n.confirmDialogMessage,
+                color: context.colors.onSurfaceVariant,
+                textAlign: TextAlign.center,
+              ),
+              AppButton.primary(
+                label: confirmLabel ?? l10n.okButtonLabel,
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+              if (!singleButton)
+                AppButton.secondary(
+                  label: cancelLabel ?? l10n.cancelButtonLabel,
+                  onPressed: () => Navigator.of(context).pop(false),
+                ),
+            ],
+          ),
+        ),
+      );
+    },
   );
 }

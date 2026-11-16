@@ -3,7 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/cubits.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/helpers/firebase_background_handler.dart';
@@ -46,21 +45,17 @@ class _VChatState extends State<VChat> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: cubits,
-      child: ScreenUtilInit(
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        child: BlocBuilder<LocaleCubit, LocaleState>(
-          builder: (context, state) {
-            return MaterialApp(
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              debugShowCheckedModeBanner: false,
-              locale: state.locale,
-              theme: AppTheme.dark,
-              onGenerateRoute: onGenerateRoute,
-            );
-          },
-        ),
+      child: BlocBuilder<LocaleCubit, LocaleState>(
+        builder: (context, state) {
+          return MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            debugShowCheckedModeBanner: false,
+            locale: state.locale,
+            theme: AppTheme.dark,
+            onGenerateRoute: onGenerateRoute,
+          );
+        },
       ),
     );
   }

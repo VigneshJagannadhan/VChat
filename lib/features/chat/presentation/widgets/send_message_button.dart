@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
 import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 
 class SendMessageButton extends StatelessWidget {
   const SendMessageButton({super.key, required this.onTap});
@@ -12,7 +12,7 @@ class SendMessageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatColors = context.chatColors;
-    final size = 50.r;
+    const size = AppSizes.sendButton;
 
     return Material(
       type: MaterialType.transparency,
@@ -35,8 +35,8 @@ class SendMessageButton extends StatelessWidget {
                 chatColors.onSentBubble,
                 BlendMode.srcIn,
               ),
-              width: 24.w,
-              height: 24.h,
+              width: AppSizes.iconMd,
+              height: AppSizes.iconMd,
             ),
           ),
         ),

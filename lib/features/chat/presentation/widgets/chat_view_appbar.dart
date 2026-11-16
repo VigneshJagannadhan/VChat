@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_app_bar.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/label_text.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/title_text.dart';
 
 class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ChatViewAppBar({super.key, required this.name, required this.lastSeen});
@@ -10,24 +12,30 @@ class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: Row(
+    return AppAppBar(
+      centerTitle: false,
+      titleWidget: Row(
+        spacing: AppSpacing.sm,
         children: [
-          CircleAvatar(radius: 20.r, child: const Icon(Icons.person)),
-          SizedBox(width: 10.w),
-          Column(
-            crossAxisAlignment: .start,
-            children: [
-              Text(name, style: context.textTheme.titleMedium),
-              Text(lastSeen, style: context.textTheme.labelSmall),
-            ],
+          const CircleAvatar(
+            radius: AppSizes.avatarSm,
+            child: Icon(Icons.person),
+          ),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TitleText.medium(name, overflow: TextOverflow.ellipsis),
+                LabelText.small(lastSeen, overflow: TextOverflow.ellipsis),
+              ],
+            ),
           ),
         ],
       ),
-      centerTitle: true,
     );
   }
 
   @override
-  Size get preferredSize => Size(1.sw, kToolbarHeight.h);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

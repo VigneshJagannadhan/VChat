@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/message_bubble.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/typing_message_bubble.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/label_text.dart';
 
 class MessageList extends StatelessWidget {
   const MessageList({super.key, required this.state});
@@ -16,7 +18,8 @@ class MessageList extends StatelessWidget {
       children: [
         Expanded(
           child: ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: 10.h),
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             reverse: true,
             itemCount: state.messages.length,
             itemBuilder: (context, index) {
@@ -63,26 +66,30 @@ class MessageList extends StatelessWidget {
     final yesterday = today.subtract(const Duration(days: 1));
     final headerDate = DateTime(localDate.year, localDate.month, localDate.day);
 
+    final l10n = AppLocalizations.of(context)!;
     String text;
     if (headerDate == today) {
-      text = 'Today';
+      text = l10n.todayLabel;
     } else if (headerDate == yesterday) {
-      text = 'Yesterday';
+      text = l10n.yesterdayLabel;
     } else {
       // Simple date format: DD/MM/YYYY
       text = '${localDate.day}/${localDate.month}/${localDate.year}';
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+      margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
+      ),
       decoration: ShapeDecoration(
         color: context.colors.surfaceContainerHighest,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
       ),
-      child: Text(text, style: context.textTheme.labelMedium),
+      child: LabelText.medium(text),
     );
   }
 }

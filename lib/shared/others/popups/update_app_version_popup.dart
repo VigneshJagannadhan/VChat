@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_button.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/body_text.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/title_text.dart';
 
 Future<dynamic> showUpdateAppVersionPopup({
   required BuildContext context,
@@ -12,27 +15,23 @@ Future<dynamic> showUpdateAppVersionPopup({
     return PopScope(
       onPopInvokedWithResult: (didPop, result) => isOptionalUpdate,
       child: AlertDialog(
-        title: Text(AppLocalizations.of(context)!.updateAvailableTitle),
-        content: Text(
+        title: TitleText.large(
+          AppLocalizations.of(context)!.updateAvailableTitle,
+        ),
+        content: BodyText.medium(
           updateMessage ?? AppLocalizations.of(context)!.defaultUpdateMessage,
         ),
         actions: [
           if (isOptionalUpdate)
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(AppLocalizations.of(context)!.updateLaterButtonLabel),
+            AppButton.text(
+              label: AppLocalizations.of(context)!.updateLaterButtonLabel,
+              onPressed: () => Navigator.of(context).pop(),
             ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              isOptionalUpdate
-                  ? AppLocalizations.of(context)!.updateNowButtonLabel
-                  : AppLocalizations.of(context)!.updateToContinueButtonLabel,
-            ),
+          AppButton.text(
+            label: isOptionalUpdate
+                ? AppLocalizations.of(context)!.updateNowButtonLabel
+                : AppLocalizations.of(context)!.updateToContinueButtonLabel,
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),

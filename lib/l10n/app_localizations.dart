@@ -259,6 +259,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsButtonTooltip;
+
+  /// No description provided for @loadingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loadingLabel;
+
+  /// No description provided for @syncingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing...'**
+  String get syncingLabel;
+
+  /// No description provided for @syncingMessagesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing latest messages...'**
+  String get syncingMessagesLabel;
+
+  /// No description provided for @typingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Typing...'**
+  String get typingLabel;
+
+  /// No description provided for @messageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get messageHint;
+
+  /// No description provided for @showPasswordTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPasswordTooltip;
+
+  /// No description provided for @hidePasswordTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePasswordTooltip;
+
+  /// No description provided for @unknownRouteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get unknownRouteMessage;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get loginTitle;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registerTitle;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordLabel;
+
+  /// No description provided for @noAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not have an account?'**
+  String get noAccountPrompt;
+
+  /// No description provided for @haveAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get haveAccountPrompt;
+
+  /// No description provided for @forgotPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get forgotPasswordLabel;
+
+  /// No description provided for @featureInProgressMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature in progress!'**
+  String get featureInProgressMessage;
+
+  /// No description provided for @pickProfileImageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a profile image'**
+  String get pickProfileImageLabel;
+
+  /// No description provided for @selectLanguageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select language'**
+  String get selectLanguageHint;
+
+  /// No description provided for @todayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayLabel;
+
+  /// No description provided for @yesterdayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterdayLabel;
+
+  /// No description provided for @confirmDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to perform this action?'**
+  String get confirmDialogMessage;
 }
 
 class _AppLocalizationsDelegate

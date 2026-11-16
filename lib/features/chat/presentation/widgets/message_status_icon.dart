@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/core/utils/enums.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 
 /// Delivery status shown inside the current user's (sent) bubble.
 class MessageStatusIcon extends StatelessWidget {
@@ -16,19 +16,19 @@ class MessageStatusIcon extends StatelessWidget {
       case MessageStatus.pending:
         return Icon(
           Icons.access_time_rounded,
-          size: 10.sp,
+          size: AppSizes.iconXs,
           color: chatColors.onSentBubbleMuted,
         );
       case MessageStatus.failed:
         return Icon(
           Icons.error_outline,
-          size: 10.sp,
+          size: AppSizes.iconXs,
           color: chatColors.sentBubbleError,
         );
       case MessageStatus.success:
         return Icon(
           Icons.check_circle,
-          size: 10.sp,
+          size: AppSizes.iconXs,
           color: chatColors.onSentBubble,
         );
     }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/extensions/date_time_extensions.dart';
 import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/core/utils/enums.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/message_entity.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/message_status_icon.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/body_text.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/text/label_text.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({super.key, required this.message});
@@ -15,17 +17,24 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final chatColors = context.chatColors;
     final isMe = message.isSentByMe;
-    final big = Radius.circular(16.r);
-    final small = Radius.circular(4.r);
+    const big = Radius.circular(AppRadius.lg);
+    const small = Radius.circular(AppRadius.sm);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenHorizontal,
+      ),
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
 
       child: Container(
-        constraints: BoxConstraints(maxWidth: 0.7.sw),
-        margin: EdgeInsets.only(top: 5.h),
-        padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 8.h),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width * 0.7,
+        ),
+        margin: const EdgeInsets.only(top: AppSpacing.xs),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
         decoration: ShapeDecoration(
           gradient: isMe ? chatColors.sentBubbleGradient : null,
           color: isMe ? null : chatColors.receivedBubble,
@@ -44,25 +53,21 @@ class MessageBubble extends StatelessWidget {
           children: [
             Flexible(
               fit: FlexFit.loose,
-              child: Text(
+              child: BodyText.large(
                 message.content ?? "",
-                style: context.textTheme.bodyLarge?.copyWith(
-                  color: isMe
-                      ? chatColors.onSentBubble
-                      : chatColors.onReceivedBubble,
-                ),
-              ),
-            ),
-            SizedBox(width: 6.w),
-            Text(
-              (message.createdAt ?? DateTime.now()).toLocal().timeFormat(),
-              style: context.textTheme.labelSmall?.copyWith(
                 color: isMe
-                    ? chatColors.onSentBubbleMuted
-                    : chatColors.onReceivedBubbleMuted,
+                    ? chatColors.onSentBubble
+                    : chatColors.onReceivedBubble,
               ),
             ),
-            if (isMe) SizedBox(width: 4.w),
+            const SizedBox(width: AppSpacing.sm),
+            LabelText.small(
+              (message.createdAt ?? DateTime.now()).toLocal().timeFormat(),
+              color: isMe
+                  ? chatColors.onSentBubbleMuted
+                  : chatColors.onReceivedBubbleMuted,
+            ),
+            if (isMe) const SizedBox(width: AppSpacing.xs),
             if (isMe)
               MessageStatusIcon(
                 status: message.status ?? MessageStatus.pending,

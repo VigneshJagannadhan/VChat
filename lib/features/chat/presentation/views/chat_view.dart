@@ -2,16 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
-import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/features/chat/data/models/message/message_model.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_states.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/chat_view_appbar.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/chat_view_bottom_nav.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/chat_view_message_body.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_scaffold.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_sync_banner.dart';
 
 class ChatView extends StatefulWidget {
   static const String route = '/chat_view';
@@ -77,46 +78,21 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: const ChatViewAppBar(
         name: 'Jake Doe',
         lastSeen: 'Last seen on 12:00 PM',
       ),
+      banner: BlocBuilder<ChatDetailCubit, ChatDetailState>(
+        builder: (context, state) => AppSyncBanner(
+          visible:
+              state is ChatDetailLoading ||
+              (state is ChatDetailLoaded && state.isSyncing),
+          message: AppLocalizations.of(context)!.syncingMessagesLabel,
+        ),
+      ),
       body: Column(
         children: [
-          BlocBuilder<ChatDetailCubit, ChatDetailState>(
-            builder: (context, state) {
-              final isSyncing =
-                  state is ChatDetailLoading ||
-                  (state is ChatDetailLoaded && state.isSyncing);
-
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 100),
-                switchInCurve: Curves.easeOut,
-                switchOutCurve: Curves.easeIn,
-                transitionBuilder: (child, animation) => SizeTransition(
-                  sizeFactor: animation,
-                  axisAlignment: -1.0,
-                  child: child,
-                ),
-                child: isSyncing
-                    ? Container(
-                        key: const ValueKey('syncing_banner'),
-                        color: context.colors.primaryContainer,
-                        width: 1.sw,
-                        padding: EdgeInsets.symmetric(vertical: 2.h),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Syncing latest messages...',
-                          style: context.textTheme.labelMedium?.copyWith(
-                            color: context.colors.onPrimaryContainer,
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(key: ValueKey('empty')),
-              );
-            },
-          ),
           const Expanded(child: ChatViewMessageBody()),
           ChatViewBottomNav(
             messageController: _messageController,

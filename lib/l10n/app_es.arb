@@ -1,14 +1,11 @@
 {
   "@@locale": "es",
-  
   "appTitle": "VChat",
   "appName": "VChat",
-  
   "chatListTitle": "VChat",
   "searchLabel": "Buscar",
   "noChatMessage": "Sin chats",
   "sendMessagePlaceholder": "¡Envía un mensaje para comenzar!",
-  
   "userProfileTitle": "Perfil de usuario",
   "userListTitle": "Lista de usuarios",
   "searchUserLabel": "Buscar usuario",
@@ -19,18 +16,35 @@
   "saveButtonLabel": "Guardar",
   "logoutButtonLabel": "Cerrar sesión",
   "retryButtonLabel": "Reintentar",
-  
   "updateAvailableTitle": "Actualización disponible",
   "updateLaterButtonLabel": "Actualizar después",
   "updateNowButtonLabel": "Actualizar ahora",
   "updateToContinueButtonLabel": "Actualizar para continuar",
   "defaultUpdateMessage": "Una nueva versión de la aplicación está disponible. Por favor, actualiza para continuar.",
-  
   "confirmDialogTitle": "Confirmar",
   "okButtonLabel": "Aceptar",
   "cancelButtonLabel": "Cancelar",
   "generalErrorMessage": "¡Algo salió mal!",
   "networkErrorMessage": "Error de red. Por favor, intenta de nuevo",
-  
-  "settingsButtonTooltip": "Configuración"
+  "settingsButtonTooltip": "Configuración",
+  "loadingLabel": "Cargando...",
+  "syncingLabel": "Sincronizando...",
+  "syncingMessagesLabel": "Sincronizando los últimos mensajes...",
+  "typingLabel": "Escribiendo...",
+  "messageHint": "Mensaje",
+  "showPasswordTooltip": "Mostrar contraseña",
+  "hidePasswordTooltip": "Ocultar contraseña",
+  "unknownRouteMessage": "Página no encontrada",
+  "loginTitle": "Iniciar sesión",
+  "registerTitle": "Registrarse",
+  "passwordLabel": "Contraseña",
+  "noAccountPrompt": "¿No tienes una cuenta?",
+  "haveAccountPrompt": "¿Ya tienes una cuenta?",
+  "forgotPasswordLabel": "¿Olvidaste tu contraseña?",
+  "featureInProgressMessage": "¡Función en desarrollo!",
+  "pickProfileImageLabel": "Elegir una foto de perfil",
+  "selectLanguageHint": "Seleccionar idioma",
+  "todayLabel": "Hoy",
+  "yesterdayLabel": "Ayer",
+  "confirmDialogMessage": "¿Seguro que quieres realizar esta acción?"
 }

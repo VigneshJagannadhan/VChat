@@ -1,12 +1,14 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/send_message_button.dart';
-import 'package:vk_custom_widgets/vk_custom_widgets.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
+import 'package:vignesh_project_01/shared/presentation/widgets/app_text_field.dart';
 
 class ChatViewBottomNav extends StatefulWidget {
   const ChatViewBottomNav({
@@ -29,43 +31,53 @@ class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        child: ValueListenableBuilder(
-          valueListenable: isNotEmpty,
-          builder: (context, notEmpty, child) {
-            return Row(
-              children: [
-                Expanded(
-                  child: VkTextFormField(
-                    controller: widget.messageController,
-                    label: '',
-                    borderWidth: 0.1.r,
-                    borderRadius: 20.r,
-                    onChanged: _onChanged,
-                  ),
+      height: null,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.sm,
+      ),
+      child: ValueListenableBuilder(
+        valueListenable: isNotEmpty,
+        builder: (context, notEmpty, child) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: AppTextField(
+                  controller: widget.messageController,
+                  hint: AppLocalizations.of(context)!.messageHint,
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
+                  minLines: 1,
+                  maxLines: 5,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  onChanged: _onChanged,
                 ),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 100),
-                  transitionBuilder: (child, animation) => SizeTransition(
-                    sizeFactor: animation,
-                    axis: Axis.horizontal,
-                    axisAlignment: -1.0,
-                    child: child,
-                  ),
-                  child: notEmpty
-                      ? Row(
-                          children: [
-                            SizedBox(width: 10.w),
-                            SendMessageButton(onTap: _sendMessage),
-                          ],
-                        )
-                      : const SizedBox.shrink(),
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 100),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  axis: Axis.horizontal,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: child,
                 ),
-              ],
-            );
-          },
-        ),
+                child: notEmpty
+                    // Counts as part of the text field, so tapping send
+                    // doesn't dismiss the keyboard.
+                    ? TextFieldTapRegion(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            start: AppSpacing.sm,
+                          ),
+                          child: SendMessageButton(onTap: _sendMessage),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

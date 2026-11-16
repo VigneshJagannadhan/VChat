@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/themes/app_colors.dart';
+import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 import 'package:vignesh_project_01/core/themes/app_typography.dart';
 import 'package:vignesh_project_01/core/themes/chat_colors.dart';
 
@@ -53,14 +53,16 @@ abstract final class AppTheme {
   static ThemeData get dark {
     const colors = _darkScheme;
     final text = AppTypography.textTheme(colors);
-    final radius = BorderRadius.circular(20.r);
+    final radius = BorderRadius.circular(AppRadius.xl);
+    final inputRadius = BorderRadius.circular(AppRadius.md);
+    // Min width only; full-width is AppButton's job (it can sit in a Row).
+    const buttonSize = Size(64, AppSizes.controlHeight);
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colors,
       textTheme: text,
-      // Still read by PrimaryButton / VkElevatedButton.
       primaryColor: colors.primary,
       scaffoldBackgroundColor: colors.surface,
       canvasColor: colors.surface,
@@ -100,12 +102,22 @@ abstract final class AppTheme {
         iconColor: colors.onSurfaceVariant,
       ),
 
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
           backgroundColor: colors.primary,
           foregroundColor: colors.onPrimary,
           textStyle: text.labelLarge,
-          elevation: 0,
+          minimumSize: buttonSize,
+          shape: RoundedRectangleBorder(borderRadius: radius),
+        ),
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: colors.tertiary,
+          textStyle: text.labelLarge,
+          minimumSize: buttonSize,
+          side: BorderSide(color: colors.outline),
           shape: RoundedRectangleBorder(borderRadius: radius),
         ),
       ),
@@ -124,9 +136,7 @@ abstract final class AppTheme {
         shape: const CircleBorder(),
       ),
 
-      progressIndicatorTheme: ProgressIndicatorThemeData(
-        color: colors.primary,
-      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: colors.primary),
 
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: colors.tertiary,
@@ -137,6 +147,9 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationThemeData(
         filled: true,
         fillColor: colors.surfaceContainerHigh,
+        // Shape only; the side comes from `activeIndicatorBorder` below
+        // because the field is filled.
+        border: OutlineInputBorder(borderRadius: inputRadius),
         labelStyle: text.bodyLarge?.copyWith(color: colors.onSurfaceVariant),
         hintStyle: text.bodyLarge?.copyWith(color: colors.onSurfaceVariant),
         floatingLabelStyle: WidgetStateTextStyle.resolveWith((states) {
@@ -148,13 +161,10 @@ abstract final class AppTheme {
           return text.bodySmall!.copyWith(color: color);
         }),
         errorStyle: text.bodySmall?.copyWith(color: colors.error),
-        // Used for the border of filled fields, including the vk_custom_widgets
-        // fields that only pass a shape via `border:`.
+        // Border side for filled fields, resolved per state.
         activeIndicatorBorder: WidgetStateBorderSide.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
-            return BorderSide(
-              color: colors.onSurface.withValues(alpha: 0.12),
-            );
+            return BorderSide(color: colors.onSurface.withValues(alpha: 0.12));
           }
           if (states.contains(WidgetState.error)) {
             return BorderSide(

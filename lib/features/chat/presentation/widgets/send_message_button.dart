@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
-import 'package:vignesh_project_01/core/themes/app_colors.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 
 class SendMessageButton extends StatelessWidget {
   const SendMessageButton({super.key, required this.onTap});
@@ -11,17 +11,34 @@ class SendMessageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(25.r),
-      onTap: onTap,
-      child: CircleAvatar(
-        backgroundColor: AppColors.primaryColor,
-        radius: 25.r,
-        child: SvgPicture.asset(
-          AppConstants.sendSvg,
-          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          width: 24.w,
-          height: 24.h,
+    final chatColors = context.chatColors;
+    final size = 50.r;
+
+    return Material(
+      type: MaterialType.transparency,
+      shape: const CircleBorder(),
+      clipBehavior: Clip.antiAlias,
+      child: Ink(
+        width: size,
+        height: size,
+        decoration: ShapeDecoration(
+          shape: const CircleBorder(),
+          gradient: chatColors.sentBubbleGradient,
+        ),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onTap,
+          child: Center(
+            child: SvgPicture.asset(
+              AppConstants.sendSvg,
+              colorFilter: ColorFilter.mode(
+                chatColors.onSentBubble,
+                BlendMode.srcIn,
+              ),
+              width: 24.w,
+              height: 24.h,
+            ),
+          ),
         ),
       ),
     );

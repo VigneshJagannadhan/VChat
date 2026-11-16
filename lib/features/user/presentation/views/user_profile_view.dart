@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/constants/app_enums.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/core/helpers/locale_helpers.dart';
 import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:vignesh_project_01/features/user/presentation/cubits/user/user_cubit.dart';
@@ -97,7 +98,10 @@ class _UserProfileViewState extends State<UserProfileView> {
 
                   SizedBox(height: 10.h),
                   VkElevatedButton(
-                    backgroundColor: Colors.red,
+                    backgroundColor: context.colors.errorContainer,
+                    style: context.textTheme.labelLarge?.copyWith(
+                      color: context.colors.onErrorContainer,
+                    ),
                     label: AppLocalizations.of(context)!.logoutButtonLabel,
                     onPressed: () {
                       var auth = context.read<AuthCubit>();

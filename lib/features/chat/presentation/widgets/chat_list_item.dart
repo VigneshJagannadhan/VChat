@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/helpers/navigation_helper.dart';
 import 'package:vignesh_project_01/core/routes/app_args.dart';
-import 'package:vignesh_project_01/core/themes/app_colors.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/features/chat/domain/entities/chat_entity.dart';
 import 'package:vignesh_project_01/features/chat/presentation/views/chat_view.dart';
 
@@ -24,7 +24,7 @@ class ChatListItem extends StatelessWidget {
               bottom: 0,
               right: 0,
               child: CircleAvatar(
-                backgroundColor: AppColors.onlineIndicator,
+                backgroundColor: context.chatColors.online,
                 radius: 5.r,
               ),
             ),

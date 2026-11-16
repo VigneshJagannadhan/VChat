@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+import 'package:vignesh_project_01/core/constants/app_constants.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/core/themes/app_styles.dart';
 
 class EmptyListWidget extends StatelessWidget {
@@ -18,7 +21,12 @@ class EmptyListWidget extends StatelessWidget {
           color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
         SizedBox(height: 20.h),
-        Text(text, style: AppStyles.ts12W400cBlack),
+        Text(
+          text,
+          style: context.textTheme.bodyMedium?.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
       ],
     );
   }

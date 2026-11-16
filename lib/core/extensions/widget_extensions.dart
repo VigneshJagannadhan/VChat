@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
 
 extension WidgetExtensions on Widget {
   Widget withEmptyWidget({
@@ -8,9 +7,8 @@ extension WidgetExtensions on Widget {
     required String text,
   }) {
     return isEmpty
-        ? Expanded(
-            child: Center(child: Text(text, style: AppStyles.ts16W400cBlack)),
-          )
+        // No explicit style: inherits the theme's default (bodyMedium).
+        ? Expanded(child: Center(child: Text(text)))
         : isLoading
         ? const Expanded(child: Center(child: CupertinoActivityIndicator()))
         : this;

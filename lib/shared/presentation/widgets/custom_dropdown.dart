@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 
 class CustomDropdown<T> extends StatefulWidget {
   final T? value;
@@ -67,6 +68,8 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
   OverlayEntry _createOverlayEntry() {
     final renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
+    final colors = context.colors;
+    final textTheme = context.textTheme;
 
     return OverlayEntry(
       builder: (_) => GestureDetector(
@@ -83,7 +86,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                 child: Material(
                   elevation: 8,
                   borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
+                  color: colors.surfaceContainerHighest,
                   child: SizeTransition(
                     sizeFactor: CurvedAnimation(
                       parent: _controller,
@@ -109,12 +112,14 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                               vertical: 14,
                             ),
                             color: isSelected
-                                ? Colors.grey.shade100
+                                ? colors.primaryContainer
                                 : Colors.transparent,
                             child: Text(
                               label,
-                              style: TextStyle(
-                                fontSize: 14,
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: isSelected
+                                    ? colors.onPrimaryContainer
+                                    : colors.onSurface,
                                 fontWeight: isSelected
                                     ? FontWeight.w600
                                     : FontWeight.w400,
@@ -140,6 +145,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
         ? widget.labelBuilder?.call(widget.value as T) ??
               widget.value.toString()
         : widget.hint;
+    final colors = context.colors;
 
     return CompositedTransformTarget(
       link: _layerLink,
@@ -148,26 +154,22 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade300),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
+          decoration: ShapeDecoration(
+            color: colors.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: colors.outline),
+            ),
           ),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: widget.value == null ? Colors.grey : Colors.black,
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: widget.value == null
+                        ? colors.onSurfaceVariant
+                        : colors.onSurface,
                   ),
                 ),
               ),

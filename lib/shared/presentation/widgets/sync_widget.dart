@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 
 class SyncWidget extends StatelessWidget {
   const SyncWidget({super.key});
@@ -9,14 +9,16 @@ class SyncWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        color: Colors.grey.shade200,
+      decoration: ShapeDecoration(
+        color: context.colors.surfaceContainerHighest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.r),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('Syncing...'),
+          Text('Syncing...', style: context.textTheme.bodyMedium),
           SizedBox(width: 10.w),
           const CupertinoActivityIndicator(),
         ],

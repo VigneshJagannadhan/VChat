@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
 
 Future<dynamic> showUpdateAppVersionPopup({
@@ -13,13 +12,9 @@ Future<dynamic> showUpdateAppVersionPopup({
     return PopScope(
       onPopInvokedWithResult: (didPop, result) => isOptionalUpdate,
       child: AlertDialog(
-        title: Text(
-          AppLocalizations.of(context)!.updateAvailableTitle,
-          style: AppStyles.ts20W400cBlack,
-        ),
+        title: Text(AppLocalizations.of(context)!.updateAvailableTitle),
         content: Text(
           updateMessage ?? AppLocalizations.of(context)!.defaultUpdateMessage,
-          style: AppStyles.ts14W400cBlack,
         ),
         actions: [
           if (isOptionalUpdate)
@@ -27,10 +22,7 @@ Future<dynamic> showUpdateAppVersionPopup({
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
-                AppLocalizations.of(context)!.updateLaterButtonLabel,
-                style: AppStyles.ts16W400cPrimary,
-              ),
+              child: Text(AppLocalizations.of(context)!.updateLaterButtonLabel),
             ),
           TextButton(
             onPressed: () {
@@ -40,7 +32,6 @@ Future<dynamic> showUpdateAppVersionPopup({
               isOptionalUpdate
                   ? AppLocalizations.of(context)!.updateNowButtonLabel
                   : AppLocalizations.of(context)!.updateToContinueButtonLabel,
-              style: AppStyles.ts16W400cPrimary,
             ),
           ),
         ],

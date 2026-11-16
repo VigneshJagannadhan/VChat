@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
@@ -22,7 +22,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
           child: SvgPicture.asset(
             isFailure ? AppConstants.errorSvg : AppConstants.successSvg,
             colorFilter: ColorFilter.mode(
-              isFailure ? Colors.red : Colors.green,
+              isFailure ? context.colors.error : context.chatColors.success,
               BlendMode.srcIn,
             ),
           ),
@@ -31,7 +31,6 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showGeneralSnackbar({
         Expanded(
           child: Text(
             errorMessage ?? AppLocalizations.of(context)!.generalErrorMessage,
-            style: AppStyles.ts16W400cWhite,
           ),
         ),
       ],

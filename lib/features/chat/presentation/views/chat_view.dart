@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/features/chat/data/models/message/message_model.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_states.dart';
@@ -102,13 +102,15 @@ class _ChatViewState extends State<ChatView> {
                 child: isSyncing
                     ? Container(
                         key: const ValueKey('syncing_banner'),
-                        color: Colors.blueGrey,
+                        color: context.colors.primaryContainer,
                         width: 1.sw,
                         padding: EdgeInsets.symmetric(vertical: 2.h),
                         alignment: Alignment.center,
                         child: Text(
                           'Syncing latest messages...',
-                          style: AppStyles.ts12W400cBlack,
+                          style: context.textTheme.labelMedium?.copyWith(
+                            color: context.colors.onPrimaryContainer,
+                          ),
                         ),
                       )
                     : const SizedBox.shrink(key: ValueKey('empty')),

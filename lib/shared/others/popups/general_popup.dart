@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vignesh_project_01/core/constants/app_constants.dart';
-import 'package:vignesh_project_01/core/themes/app_colors.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
+import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/primary_button.dart';
 
@@ -30,14 +29,16 @@ Future<bool?> showGeneralPopup({
             SizedBox(height: 10.h),
             Text(
               title ?? AppLocalizations.of(context)!.confirmDialogTitle,
-              style: AppStyles.ts20W400cBlack,
+              style: context.textTheme.titleLarge,
             ),
             SizedBox(height: 20.h),
             Lottie.asset(AppConstants.lottieError, height: 100.h),
             SizedBox(height: 20.h),
             Text(
               message ?? 'Are you sure you want to perform this action?',
-              style: AppStyles.ts12W400cBlack,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20.h),
@@ -45,7 +46,6 @@ Future<bool?> showGeneralPopup({
               onTap: () => Navigator.of(context).pop(true),
               label:
                   confirmLabel ?? AppLocalizations.of(context)!.okButtonLabel,
-              color: AppColors.primaryColor,
             ),
             if (!singleButton) SizedBox(height: 10.h),
             if (!singleButton)
@@ -54,7 +54,8 @@ Future<bool?> showGeneralPopup({
                 label:
                     cancelLabel ??
                     AppLocalizations.of(context)!.cancelButtonLabel,
-                color: Colors.red,
+                color: context.colors.errorContainer,
+                foregroundColor: context.colors.onErrorContainer,
               ),
           ],
         ),

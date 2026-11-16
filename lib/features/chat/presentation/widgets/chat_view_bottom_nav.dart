@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vignesh_project_01/core/di/locator.dart';
 import 'package:vignesh_project_01/core/services/socket_service.dart';
-import 'package:vignesh_project_01/core/themes/app_colors.dart';
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
 import 'package:vignesh_project_01/features/chat/presentation/widgets/send_message_button.dart';
 import 'package:vk_custom_widgets/vk_custom_widgets.dart';
@@ -30,7 +29,6 @@ class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: AppColors.darkBackground,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         child: ValueListenableBuilder(

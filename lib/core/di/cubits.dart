@@ -10,6 +10,7 @@ import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail
 import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_list/chat_list_cubit.dart';
 import 'package:vignesh_project_01/features/user/domain/repositories/user_repository.dart';
 import 'package:vignesh_project_01/features/user/presentation/cubits/user/user_cubit.dart';
+import 'package:vignesh_project_01/shared/others/providers/token_provider.dart';
 import 'package:vignesh_project_01/features/user/presentation/cubits/user_list/user_list_cubit.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/fcm_repository.dart';
 import 'package:vignesh_project_01/shared/domain/repositories/update_repository.dart';
@@ -24,6 +25,7 @@ List<BlocProvider> get cubits => [
       storageService: locator<StorageService>(),
       socketService: locator<SocketService>(),
       hiveService: locator<HiveService>(),
+      tokenProvider: locator<TokenProvider>(),
     ),
   ),
 

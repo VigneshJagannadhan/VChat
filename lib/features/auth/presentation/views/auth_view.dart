@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vignesh_project_01/core/constants/app_validators.dart';
+import 'package:vignesh_project_01/core/constants/dev_credentials.dart';
 import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
 import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 import 'package:vignesh_project_01/features/auth/presentation/cubits/auth/auth_cubit.dart';
@@ -26,14 +27,15 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
+  // Empty unless a debug run passes config/dev.json; always empty in release.
   final TextEditingController _nameController = TextEditingController(
-    text: 'user',
+    text: DevCredentials.name,
   );
   final TextEditingController _emailController = TextEditingController(
-    text: 'alicedoe@gmail.com',
+    text: DevCredentials.email,
   );
   final TextEditingController _passwordController = TextEditingController(
-    text: 'Abcd@1234',
+    text: DevCredentials.password,
   );
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

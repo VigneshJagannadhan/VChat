@@ -26,7 +26,18 @@ class ChatRepositoryImpl extends ChatRepository {
   Either<Failure, ChatResponseEntity> getChatList({String? search}) {
     var result = chatLocalDataSource.getChatList();
     return result.fold((failure) => Left(failure), (response) {
-      return Right(response.toEntity(userId: _currentUserId));
+      final entity = response.toEntity(userId: _currentUserId);
+      final query = search?.trim().toLowerCase() ?? '';
+      if (query.isEmpty) return Right(entity);
+
+      // Same match as the backend: other participant's name contains query.
+      entity.chats = entity.chats
+          ?.where(
+            (chat) => (chat.participant?.username?.toLowerCase() ?? '')
+                .contains(query),
+          )
+          .toList();
+      return Right(entity);
     });
   }
 
@@ -34,9 +45,13 @@ class ChatRepositoryImpl extends ChatRepository {
   Future<Either<Failure, ChatResponseEntity>> syncChatList({
     String? search,
   }) async {
-    var result = await chatRemoteDataSource.getChatList(search: search);
+    final query = search?.trim() ?? '';
+    var result = await chatRemoteDataSource.getChatList(
+      search: query.isEmpty ? null : query,
+    );
     return result.fold((failure) => Left(failure), (response) async {
-      await chatLocalDataSource.saveChatList(response);
+      // Only the unfiltered list is cached; search results would replace it.
+      if (query.isEmpty) await chatLocalDataSource.saveChatList(response);
       return Right(response.toEntity(userId: _currentUserId));
     });
   }

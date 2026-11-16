@@ -17,7 +17,9 @@ class ApiService {
     _dio = Dio(
       BaseOptions(
         baseUrl: AppUrls.baseUrl,
-        connectTimeout: const Duration(seconds: 15),
+        // Fail fast when the server is unreachable; RetryInterceptor
+        // deliberately doesn't retry timeouts.
+        connectTimeout: const Duration(seconds: 8),
         receiveTimeout: const Duration(seconds: 15),
       ),
     );

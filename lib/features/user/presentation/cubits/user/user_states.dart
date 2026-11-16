@@ -10,7 +10,19 @@ class UserLoading extends UserStates {}
 class UserLoaded extends UserStates {
   final UserEntity user;
   final bool isSyncing;
-  UserLoaded({required this.user, required this.isSyncing});
+
+  /// A profile update is in flight.
+  final bool isSaving;
+
+  /// Set when the last profile update failed; cleared on the next save.
+  final Failure? saveFailure;
+
+  UserLoaded({
+    required this.user,
+    required this.isSyncing,
+    this.isSaving = false,
+    this.saveFailure,
+  });
 }
 
 class UserFailure extends UserStates {

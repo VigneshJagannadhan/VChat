@@ -391,6 +391,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry sending'**
   String get retrySendHint;
+
+  /// No description provided for @profileUpdatedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdatedMessage;
+
+  /// No description provided for @usernameTakenMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'That name is already taken'**
+  String get usernameTakenMessage;
 }
 
 class _AppLocalizationsDelegate

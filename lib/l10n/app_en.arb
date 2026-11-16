@@ -48,5 +48,7 @@
   "yesterdayLabel": "Yesterday",
   "confirmDialogMessage": "Are you sure you want to perform this action?",
   "messageNotSentLabel": "Not sent. Tap to retry",
-  "retrySendHint": "Retry sending"
+  "retrySendHint": "Retry sending",
+  "profileUpdatedMessage": "Profile updated",
+  "usernameTakenMessage": "That name is already taken"
 }

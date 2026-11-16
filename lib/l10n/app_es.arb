@@ -48,5 +48,7 @@
   "yesterdayLabel": "Ayer",
   "confirmDialogMessage": "¿Seguro que quieres realizar esta acción?",
   "messageNotSentLabel": "No enviado. Toca para reintentar",
-  "retrySendHint": "Reintentar envío"
+  "retrySendHint": "Reintentar envío",
+  "profileUpdatedMessage": "Perfil actualizado",
+  "usernameTakenMessage": "Ese nombre ya está en uso"
 }

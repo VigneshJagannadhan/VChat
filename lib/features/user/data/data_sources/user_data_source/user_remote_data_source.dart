@@ -28,4 +28,15 @@ class UserRemoteDataSourcesImpl extends UserRemoteDataSources {
     var result = await apiService.get(route: AppUrls.profile);
     return result.map((response) => UserModel.fromJson(response.data));
   }
+
+  @override
+  Future<Either<Failure, UserModel>> updateProfile({
+    required String name,
+  }) async {
+    final result = await apiService.put(
+      route: AppUrls.profile,
+      data: {'username': name},
+    );
+    return result.map((response) => UserModel.fromJson(response.data));
+  }
 }

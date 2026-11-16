@@ -24,9 +24,17 @@ class ChatViewBottomNav extends StatefulWidget {
 }
 
 class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
-  Timer? _debounce;
+  final SocketService _socketService = locator<SocketService>();
+  final ValueNotifier<bool> _hasText = ValueNotifier<bool>(false);
+  Timer? _typingTimer;
   bool _isTyping = false;
-  ValueNotifier<bool> isNotEmpty = ValueNotifier<bool>(false);
+
+  @override
+  void dispose() {
+    _stopTyping();
+    _hasText.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +45,8 @@ class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
         vertical: AppSpacing.sm,
       ),
       child: ValueListenableBuilder(
-        valueListenable: isNotEmpty,
-        builder: (context, notEmpty, child) {
+        valueListenable: _hasText,
+        builder: (context, hasText, child) {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -62,7 +70,13 @@ class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
                   alignment: AlignmentDirectional.centerStart,
                   child: child,
                 ),
-                child: notEmpty
+                // Send only once the chat has loaded, so the message has a
+                // list to appear in.
+                child:
+                    hasText &&
+                        context.select<ChatDetailCubit, bool>(
+                          (cubit) => cubit.canSend,
+                        )
                     // Counts as part of the text field, so tapping send
                     // doesn't dismiss the keyboard.
                     ? TextFieldTapRegion(
@@ -82,37 +96,37 @@ class _ChatViewBottomNavState extends State<ChatViewBottomNav> {
     );
   }
 
-  void _onChanged(String? value) {
-    _debounce?.cancel();
-    var socketService = locator<SocketService>();
-
-    if (value?.isNotEmpty ?? false) {
-      isNotEmpty.value = true;
-    } else {
-      isNotEmpty.value = false;
-    }
+  void _onChanged(String value) {
+    _hasText.value = value.trim().isNotEmpty;
 
     if (!_isTyping) {
-      socketService.startTyping(widget.chatId ?? "");
+      _socketService.startTyping(widget.chatId ?? '');
       _isTyping = true;
     }
+    _typingTimer?.cancel();
+    _typingTimer = Timer(const Duration(seconds: 1), _stopTyping);
+  }
 
-    _debounce = Timer(const Duration(seconds: 1), () {
-      _isTyping = false;
-      socketService.stopTyping(widget.chatId ?? "");
-    });
+  void _stopTyping() {
+    _typingTimer?.cancel();
+    if (!_isTyping) return;
+    _isTyping = false;
+    _socketService.stopTyping(widget.chatId ?? '');
   }
 
   void _sendMessage() {
-    var read = context.read<ChatDetailCubit>();
-    read
-        .sendMessage(
-          userId: widget.chatId ?? '',
-          content: widget.messageController.text,
-        )
-        .then((_) {
-          widget.messageController.clear();
-          isNotEmpty.value = false;
-        });
+    final content = widget.messageController.text;
+    if (content.trim().isEmpty) return;
+
+    // Clear right away so a slow request can't be sent twice; a failed
+    // message stays in the list with a retry action instead.
+    widget.messageController.clear();
+    _hasText.value = false;
+    _stopTyping();
+
+    context.read<ChatDetailCubit>().sendMessage(
+      chatId: widget.chatId ?? '',
+      content: content,
+    );
   }
 }

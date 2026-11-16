@@ -7,6 +7,9 @@ import 'package:vignesh_project_01/features/chat/presentation/widgets/message_st
 import 'package:vignesh_project_01/core/themes/app_dimens.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/text/body_text.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/text/label_text.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vignesh_project_01/features/chat/presentation/cubits/chat_detail/chat_detail_cubit.dart';
+import 'package:vignesh_project_01/l10n/app_localizations.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({super.key, required this.message});
@@ -20,61 +23,92 @@ class MessageBubble extends StatelessWidget {
     const big = Radius.circular(AppRadius.lg);
     const small = Radius.circular(AppRadius.sm);
 
+    final bubble = Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.sizeOf(context).width * 0.7,
+      ),
+      margin: const EdgeInsets.only(top: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: ShapeDecoration(
+        gradient: isMe ? chatColors.sentBubbleGradient : null,
+        color: isMe ? null : chatColors.receivedBubble,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: big,
+            topRight: big,
+            bottomLeft: isMe ? big : small,
+            bottomRight: isMe ? small : big,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: .min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Flexible(
+            fit: FlexFit.loose,
+            child: BodyText.large(
+              message.content ?? "",
+              color: isMe
+                  ? chatColors.onSentBubble
+                  : chatColors.onReceivedBubble,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          LabelText.small(
+            (message.createdAt ?? DateTime.now()).toLocal().timeFormat(),
+            color: isMe
+                ? chatColors.onSentBubbleMuted
+                : chatColors.onReceivedBubbleMuted,
+          ),
+          if (isMe) const SizedBox(width: AppSpacing.xs),
+          if (isMe)
+            MessageStatusIcon(status: message.status ?? MessageStatus.pending),
+        ],
+      ),
+    );
+
+    final failed = isMe && message.status == MessageStatus.failed;
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.screenHorizontal,
       ),
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width * 0.7,
-        ),
-        margin: const EdgeInsets.only(top: AppSpacing.xs),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: ShapeDecoration(
-          gradient: isMe ? chatColors.sentBubbleGradient : null,
-          color: isMe ? null : chatColors.receivedBubble,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: big,
-              topRight: big,
-              bottomLeft: isMe ? big : small,
-              bottomRight: isMe ? small : big,
-            ),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: .min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Flexible(
-              fit: FlexFit.loose,
-              child: BodyText.large(
-                message.content ?? "",
-                color: isMe
-                    ? chatColors.onSentBubble
-                    : chatColors.onReceivedBubble,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            LabelText.small(
-              (message.createdAt ?? DateTime.now()).toLocal().timeFormat(),
-              color: isMe
-                  ? chatColors.onSentBubbleMuted
-                  : chatColors.onReceivedBubbleMuted,
-            ),
-            if (isMe) const SizedBox(width: AppSpacing.xs),
-            if (isMe)
-              MessageStatusIcon(
-                status: message.status ?? MessageStatus.pending,
-              ),
-          ],
-        ),
-      ),
+      child: failed
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Semantics(
+                  button: true,
+                  hint: l10n.retrySendHint,
+                  onTap: () => _retry(context),
+                  child: InkWell(
+                    customBorder: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(big),
+                    ),
+                    onTap: () => _retry(context),
+                    child: bubble,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.xxs),
+                  child: LabelText.small(
+                    l10n.messageNotSentLabel,
+                    color: context.colors.error,
+                  ),
+                ),
+              ],
+            )
+          : bubble,
     );
   }
+
+  void _retry(BuildContext context) =>
+      context.read<ChatDetailCubit>().retryMessage(message);
 }

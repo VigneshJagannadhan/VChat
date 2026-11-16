@@ -150,4 +150,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get confirmDialogMessage =>
       'Are you sure you want to perform this action?';
+
+  @override
+  String get messageNotSentLabel => 'Not sent. Tap to retry';
+
+  @override
+  String get retrySendHint => 'Retry sending';
 }

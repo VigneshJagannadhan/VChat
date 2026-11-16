@@ -48,3 +48,6 @@ app.*.map.json
 
 # Environment
 .env
+
+# Local debug-only defines (see lib/core/constants/dev_credentials.dart)
+config/dev.json

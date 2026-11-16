@@ -21,15 +21,9 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
-  final TextEditingController _nameController = TextEditingController(
-    text: 'user',
-  );
-  final TextEditingController _emailController = TextEditingController(
-    text: 'alicedoe@gmail.com',
-  );
-  final TextEditingController _passwordController = TextEditingController(
-    text: 'Abcd@1234',
-  );
+  final TextEditingController _nameController = TextEditingController(text: 'user');
+  final TextEditingController _emailController = TextEditingController(text: 'alicedoe@gmail.com');
+  final TextEditingController _passwordController = TextEditingController(text: 'Abcd@1234');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final ValueNotifier<bool> _isLogin = ValueNotifier(true);
@@ -48,48 +42,32 @@ class _AuthViewState extends State<AuthView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    value ? 'Login' : 'Register',
-                    style: context.textTheme.headlineLarge,
-                  ),
+                  Text(value ? 'Login' : 'Register', style: context.textTheme.headlineLarge),
                   SizedBox(height: 30.h),
-                  Align(
-                    alignment: Alignment.center,
-                    child: ProfileImageWidget(
-                      onSelected: (file) {
-                        print('File : ${file?.path}');
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20.h),
                   if (!value)
-                    VkTextFormField(
-                      label: "Name",
-                      controller: _nameController,
-                      validator: (value) => AppValidators.validateName(value),
+                    Align(
+                      alignment: Alignment.center,
+                      child: ProfileImageWidget(
+                        onSelected: (file) {
+                          print('File : ${file?.path}');
+                        },
+                      ),
                     ),
+                  SizedBox(height: 20.h),
+                  if (!value) VkTextFormField(label: "Name", controller: _nameController, validator: (value) => AppValidators.validateName(value)),
                   if (!value) SizedBox(height: 10.h),
-                  VkTextFormField(
-                    label: "Email",
-                    controller: _emailController,
-                    validator: (value) => AppValidators.validateEmail(value),
-                  ),
+                  VkTextFormField(label: "Email", controller: _emailController, validator: (value) => AppValidators.validateEmail(value)),
                   SizedBox(height: 10.h),
                   VkPasswordFormField(
                     label: "Password",
                     controller: _passwordController,
-                    validator: (val) => value
-                        ? AppValidators.validateLoginPassword(val)
-                        : AppValidators.validateRegistrationPassword(val),
+                    validator: (val) => value ? AppValidators.validateLoginPassword(val) : AppValidators.validateRegistrationPassword(val),
                   ),
                   SizedBox(height: 10.h),
                   BlocConsumer<AuthCubit, AuthState>(
                     listener: (context, state) {
                       if (state is AuthFailure) {
-                        showGeneralSnackbar(
-                          context: context,
-                          errorMessage: state.failure.message,
-                        );
+                        showGeneralSnackbar(context: context, errorMessage: state.failure.message);
                       }
                     },
                     builder: (context, state) {
@@ -103,17 +81,8 @@ class _AuthViewState extends State<AuthView> {
                             String name = _nameController.text.trim();
                             AuthCubit auth = context.read<AuthCubit>();
                             value
-                                ? await auth.login(
-                                    context: context,
-                                    email: email,
-                                    password: password,
-                                  )
-                                : await auth.register(
-                                    context: context,
-                                    email: email,
-                                    name: name,
-                                    password: password,
-                                  );
+                                ? await auth.login(context: context, email: email, password: password)
+                                : await auth.register(context: context, email: email, name: name, password: password);
                           }
                         },
                       );
@@ -131,28 +100,19 @@ class _AuthViewState extends State<AuthView> {
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
                           child: Text(
-                            value
-                                ? 'Do not have an account?'
-                                : 'Already have an account?',
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colors.tertiary,
-                            ),
+                            value ? 'Do not have an account?' : 'Already have an account?',
+                            style: context.textTheme.bodyMedium?.copyWith(color: context.colors.tertiary),
                           ),
                         ),
                       ),
 
                       InkWell(
-                        onTap: () => showGeneralSnackbar(
-                          context: context,
-                          errorMessage: 'Feature inprogress!',
-                        ),
+                        onTap: () => showGeneralSnackbar(context: context, errorMessage: 'Feature inprogress!'),
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
                           child: Text(
                             'Forgot Password?',
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colors.tertiary,
-                            ),
+                            style: context.textTheme.bodyMedium?.copyWith(color: context.colors.tertiary),
                           ),
                         ),
                       ),
@@ -190,9 +150,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-        );
+        FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
 
         if (result != null) {
           final path = result.files.single.path;
@@ -210,10 +168,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
           return Stack(
             children: [
               DecoratedBox(
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  gradient: context.chatColors.sentBubbleGradient,
-                ),
+                decoration: ShapeDecoration(shape: const CircleBorder(), gradient: context.chatColors.sentBubbleGradient),
                 child: Padding(
                   padding: EdgeInsets.all(5.r),
                   child: CircleAvatar(
@@ -224,11 +179,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
                         ? null
                         : Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10.w),
-                            child: Text(
-                              'Click to Pick an image',
-                              style: context.textTheme.bodySmall,
-                              textAlign: TextAlign.center,
-                            ),
+                            child: Text('Click to Pick an image', style: context.textTheme.bodySmall, textAlign: TextAlign.center),
                           ),
                   ),
                 ),
@@ -239,11 +190,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
                 child: CircleAvatar(
                   backgroundColor: colors.primary,
                   radius: 15.r,
-                  child: Icon(
-                    image != null ? Icons.edit : Icons.add_a_photo,
-                    size: 15.sp,
-                    color: colors.onPrimary,
-                  ),
+                  child: Icon(image != null ? Icons.edit : Icons.add_a_photo, size: 15.sp, color: colors.onPrimary),
                 ),
               ),
             ],

@@ -26,7 +26,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case ChatView.route:
       final args = settings.arguments as ChatDetailViewArgs?;
       return MaterialPageRoute(
-        builder: (context) => ChatView(chatId: args?.chatId),
+        builder: (context) =>
+            ChatView(chatId: args?.chatId, participant: args?.participant),
       );
 
     /// USER PROFILE SCREEN

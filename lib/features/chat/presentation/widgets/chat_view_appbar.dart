@@ -5,13 +5,16 @@ import 'package:vignesh_project_01/shared/presentation/widgets/text/label_text.d
 import 'package:vignesh_project_01/shared/presentation/widgets/text/title_text.dart';
 
 class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ChatViewAppBar({super.key, required this.name, required this.lastSeen});
+  const ChatViewAppBar({super.key, required this.name, this.subtitle});
 
   final String name;
-  final String lastSeen;
+
+  /// Optional second line (e.g. presence, once the backend tracks it).
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
+    final subtitle = this.subtitle;
     return AppAppBar(
       centerTitle: false,
       titleWidget: Row(
@@ -27,7 +30,8 @@ class ChatViewAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TitleText.medium(name, overflow: TextOverflow.ellipsis),
-                LabelText.small(lastSeen, overflow: TextOverflow.ellipsis),
+                if (subtitle != null)
+                  LabelText.small(subtitle, overflow: TextOverflow.ellipsis),
               ],
             ),
           ),

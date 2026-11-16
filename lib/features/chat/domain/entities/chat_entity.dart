@@ -13,7 +13,7 @@ class ChatEntity extends Equatable {
   @override
   List<Object?> get props => [id, participant, lastMessage];
 
-  String get participantName => participant?.username?.toUpperCase() ?? '';
+  String get participantName => participant?.displayName ?? '';
 
   String get lastMessageContent => lastMessage?.content ?? '';
 

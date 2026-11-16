@@ -17,6 +17,7 @@ import 'package:vignesh_project_01/shared/presentation/widgets/app_scaffold.dart
 import 'package:vignesh_project_01/shared/presentation/widgets/app_text_field.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/text/body_text.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/text/title_text.dart';
+import 'package:vignesh_project_01/features/chat/domain/entities/participant_entity.dart';
 
 class UserListView extends StatefulWidget {
   static const String route = '/user_list_view';
@@ -130,7 +131,14 @@ class UserListItem extends StatelessWidget {
                 Navigator.pushReplacementNamed(
                   context,
                   ChatView.route,
-                  arguments: ChatDetailViewArgs(chatId: id),
+                  arguments: ChatDetailViewArgs(
+                    chatId: id,
+                    participant: ParticipantEntity(
+                      id: user.id,
+                      username: user.name,
+                      email: user.email,
+                    ),
+                  ),
                 );
               }
               isLoading.value = false;

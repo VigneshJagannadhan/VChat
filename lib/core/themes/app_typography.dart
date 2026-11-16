@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// Builds the app [TextTheme] (Poppins).
 ///
 /// Styles carry size + weight + a default color from the [ColorScheme].
-/// In UI code pick the role that matches the text's purpose, e.g.
-/// `context.textTheme.bodyLarge`, and only `copyWith(color: ...)` when the
-/// text sits on a non-default background.
+/// In UI code use the text widgets in `shared/presentation/widgets/text/`
+/// (e.g. `BodyText.medium('...')`), or their static style getters
+/// (e.g. `BodyText.mediumStyle(context)`) where a raw [TextStyle] is needed.
+/// Sizes are unscaled logical pixels; the OS text-size setting is applied by
+/// Flutter's TextScaler.
 abstract final class AppTypography {
   static TextTheme textTheme(ColorScheme colors) {
     TextStyle style(double size, FontWeight weight, Color color) =>
-        GoogleFonts.poppins(
-          fontSize: size.sp,
-          fontWeight: weight,
-          color: color,
-        );
+        GoogleFonts.poppins(fontSize: size, fontWeight: weight, color: color);
 
     final primary = colors.onSurface;
     final secondary = colors.onSurfaceVariant;

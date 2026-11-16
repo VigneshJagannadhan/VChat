@@ -89,4 +89,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsButtonTooltip => 'Settings';
+
+  @override
+  String get loadingLabel => 'Loading...';
+
+  @override
+  String get syncingLabel => 'Syncing...';
+
+  @override
+  String get syncingMessagesLabel => 'Syncing latest messages...';
+
+  @override
+  String get typingLabel => 'Typing...';
+
+  @override
+  String get messageHint => 'Message';
+
+  @override
+  String get showPasswordTooltip => 'Show password';
+
+  @override
+  String get hidePasswordTooltip => 'Hide password';
+
+  @override
+  String get unknownRouteMessage => 'Page not found';
+
+  @override
+  String get loginTitle => 'Login';
+
+  @override
+  String get registerTitle => 'Register';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get noAccountPrompt => 'Do not have an account?';
+
+  @override
+  String get haveAccountPrompt => 'Already have an account?';
+
+  @override
+  String get forgotPasswordLabel => 'Forgot Password?';
+
+  @override
+  String get featureInProgressMessage => 'Feature in progress!';
+
+  @override
+  String get pickProfileImageLabel => 'Pick a profile image';
+
+  @override
+  String get selectLanguageHint => 'Select language';
+
+  @override
+  String get todayLabel => 'Today';
+
+  @override
+  String get yesterdayLabel => 'Yesterday';
+
+  @override
+  String get confirmDialogMessage =>
+      'Are you sure you want to perform this action?';
 }

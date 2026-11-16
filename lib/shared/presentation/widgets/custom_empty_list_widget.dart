@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-import 'package:vignesh_project_01/core/constants/app_constants.dart';
 import 'package:vignesh_project_01/core/extensions/theme_extensions.dart';
-import 'package:vignesh_project_01/core/themes/app_styles.dart';
 
 class EmptyListWidget extends StatelessWidget {
   const EmptyListWidget({super.key, required this.text});
@@ -18,7 +15,7 @@ class EmptyListWidget extends StatelessWidget {
         Icon(
           Icons.chat_bubble_outline_rounded,
           size: 64.r,
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          color: context.colors.onSurfaceVariant,
         ),
         SizedBox(height: 20.h),
         Text(

@@ -379,6 +379,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to perform this action?'**
   String get confirmDialogMessage;
+
+  /// No description provided for @messageNotSentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent. Tap to retry'**
+  String get messageNotSentLabel;
+
+  /// No description provided for @retrySendHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry sending'**
+  String get retrySendHint;
 }
 
 class _AppLocalizationsDelegate

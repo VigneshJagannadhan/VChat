@@ -14,7 +14,6 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     log('ChatDetailCubit created: $hashCode');
   }
 
-  bool isTyping = false;
   String? currentChatRoomId;
 
   Future<void> getChatDetail({required String id}) async {
@@ -42,13 +41,27 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
       (response) {
         emit(
           ChatDetailLoaded(
-            messages: response.messages?.reversed.toList() ?? [],
+            // Keep messages the server doesn't have yet, so a sync that
+            // finishes mid-send doesn't make them disappear.
+            messages: [..._unsentMessages(), ...?response.messages?.reversed],
             isTyping: false,
             isSyncing: false,
           ),
         );
       },
     );
+  }
+
+  List<MessageEntity> _unsentMessages() {
+    final current = state;
+    if (current is! ChatDetailLoaded) return const [];
+    return current.messages
+        .where(
+          (m) =>
+              m.status == MessageStatus.pending ||
+              m.status == MessageStatus.failed,
+        )
+        .toList();
   }
 
   void addIncomingMessage(MessageEntity data) {
@@ -70,14 +83,13 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
   }
 
   void addOutgoingMessage(MessageEntity data) {
-    if (state is ChatDetailLoaded) {
-      final currentState = state as ChatDetailLoaded;
-      final updatedMessages = List.of(currentState.messages)..insert(0, data);
+    final currentState = state;
+    if (currentState is ChatDetailLoaded) {
       emit(
         ChatDetailLoaded(
-          messages: updatedMessages,
-          isTyping: false,
-          isSyncing: false,
+          messages: [data, ...currentState.messages],
+          isTyping: currentState.isTyping,
+          isSyncing: currentState.isSyncing,
         ),
       );
     } else {
@@ -99,53 +111,72 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     }
   }
 
+  /// Whether a message can be sent right now. Messages are only shown and
+  /// tracked once the chat has loaded.
+  bool get canSend => state is ChatDetailLoaded;
+
+  /// Sends [content] to [chatId] with an optimistic pending bubble.
+  /// Blank content, or a chat that hasn't loaded, is ignored.
   Future<void> sendMessage({
-    required String userId,
+    required String chatId,
     required String content,
   }) async {
-    final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+    final text = content.trim();
+    if (text.isEmpty || !canSend) return;
 
-    MessageEntity pendingMessage = MessageEntity(
-      id: tempId,
-      content: content,
+    final pendingMessage = MessageEntity(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      chatRoomId: chatId,
+      content: text,
       createdAt: DateTime.now(),
       isSentByMe: true,
       status: MessageStatus.pending,
     );
     addOutgoingMessage(pendingMessage);
-    final result = await chatRepository.sendMessage(
-      userId: userId,
-      content: content,
-    );
+    await _deliver(pendingMessage);
+  }
 
-    result.fold(
-      (failure) {
-        updateMessageStatus(messageId: tempId, status: MessageStatus.failed);
-      },
-      (data) {
-        updateMessageStatus(messageId: tempId, status: MessageStatus.success);
-      },
+  /// Resends a failed message, keeping its place in the list.
+  Future<void> retryMessage(MessageEntity message) async {
+    if (message.status != MessageStatus.failed) return;
+    updateMessageStatus(messageId: message.id!, status: MessageStatus.pending);
+    await _deliver(message);
+  }
+
+  Future<void> _deliver(MessageEntity message) async {
+    final result = await chatRepository.sendMessage(
+      userId: message.chatRoomId ?? currentChatRoomId ?? '',
+      content: message.content ?? '',
+    );
+    updateMessageStatus(
+      messageId: message.id!,
+      status: result.isRight() ? MessageStatus.success : MessageStatus.failed,
     );
   }
 
+  /// No-op if the chat isn't loaded (e.g. the user opened another chat
+  /// while this message was in flight).
   void updateMessageStatus({
     required String messageId,
     required MessageStatus status,
     String? newServerId,
   }) {
-    var currentState = state as ChatDetailLoaded;
-    final updatedMessages = currentState.messages.map((message) {
-      if (message.id == messageId) {
-        return message.copyWith(status: status, id: newServerId ?? message.id);
-      }
-      return message;
-    }).toList();
+    final currentState = state;
+    if (currentState is! ChatDetailLoaded) return;
 
     emit(
       ChatDetailLoaded(
-        messages: updatedMessages,
-        isTyping: isTyping,
-        isSyncing: false,
+        messages: [
+          for (final message in currentState.messages)
+            message.id == messageId
+                ? message.copyWith(
+                    status: status,
+                    id: newServerId ?? message.id,
+                  )
+                : message,
+        ],
+        isTyping: currentState.isTyping,
+        isSyncing: currentState.isSyncing,
       ),
     );
   }

@@ -46,5 +46,7 @@
   "selectLanguageHint": "Seleccionar idioma",
   "todayLabel": "Hoy",
   "yesterdayLabel": "Ayer",
-  "confirmDialogMessage": "¿Seguro que quieres realizar esta acción?"
+  "confirmDialogMessage": "¿Seguro que quieres realizar esta acción?",
+  "messageNotSentLabel": "No enviado. Toca para reintentar",
+  "retrySendHint": "Reintentar envío"
 }

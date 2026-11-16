@@ -11,4 +11,7 @@ abstract class UserRepository {
 
   Either<Failure, UserEntity> getProfileDetail();
   Future<Either<Failure, UserEntity>> syncProfileDetail();
+
+  /// Saves the new display name on the server, then caches the result.
+  Future<Either<Failure, UserEntity>> updateProfile({required String name});
 }

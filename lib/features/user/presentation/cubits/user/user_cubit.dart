@@ -27,4 +27,21 @@ class UserCubit extends Cubit<UserStates> {
       }
     }, (response) => emit(UserLoaded(user: response, isSyncing: false)));
   }
+
+  /// Updates the display name. Keeps showing the current profile while
+  /// saving; on failure the old profile stays with [UserLoaded.saveFailure].
+  Future<void> updateProfile({required String name}) async {
+    final current = state;
+    if (current is! UserLoaded || current.isSaving) return;
+
+    emit(UserLoaded(user: current.user, isSyncing: false, isSaving: true));
+
+    final result = await userRepository.updateProfile(name: name.trim());
+    result.fold(
+      (failure) => emit(
+        UserLoaded(user: current.user, isSyncing: false, saveFailure: failure),
+      ),
+      (user) => emit(UserLoaded(user: user, isSyncing: false)),
+    );
+  }
 }

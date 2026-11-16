@@ -25,7 +25,8 @@ class AppValidators {
       return "Name cannot be empty";
     }
 
-    final nameRegex = RegExp(r"^[a-zA-Z ]{2,}$");
+    // Matches the backend rule for PUT /api/profile.
+    final nameRegex = RegExp(r"^[a-zA-Z ]{2,30}$");
     if (!nameRegex.hasMatch(value.trim())) {
       return "Enter a valid name";
     }

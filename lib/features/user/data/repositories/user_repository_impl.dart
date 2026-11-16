@@ -54,4 +54,17 @@ class UserRepositoryImpl extends UserRepository {
       return Right(response.toEntity());
     });
   }
+
+  @override
+  Future<Either<Failure, UserEntity>> updateProfile({
+    required String name,
+  }) async {
+    final result = await remoteDataSource.updateProfile(name: name);
+    return await result.fold((failure) async => Left(failure), (
+      response,
+    ) async {
+      await localDataSource.saveProfileDetail(response);
+      return Right(response.toEntity());
+    });
+  }
 }

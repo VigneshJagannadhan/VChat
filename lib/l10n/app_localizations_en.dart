@@ -156,4 +156,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retrySendHint => 'Retry sending';
+
+  @override
+  String get profileUpdatedMessage => 'Profile updated';
+
+  @override
+  String get usernameTakenMessage => 'That name is already taken';
 }

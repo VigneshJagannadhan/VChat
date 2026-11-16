@@ -6,6 +6,7 @@ import 'package:vignesh_project_01/features/user/data/models/user_response/user_
 abstract class UserRemoteDataSources {
   Future<Either<Failure, UserListResponseModel>> getUserList({String? search});
   Future<Either<Failure, UserModel>> getProfileDetail();
+  Future<Either<Failure, UserModel>> updateProfile({required String name});
 }
 
 abstract class UserLocalDataSource {

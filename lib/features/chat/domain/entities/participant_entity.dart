@@ -13,4 +13,7 @@ class ParticipantEntity extends Equatable {
 
   @override
   List<Object?> get props => [id, username, email];
+
+  /// Name as shown in the chat list and chat header.
+  String get displayName => username?.toUpperCase() ?? '';
 }

@@ -13,12 +13,14 @@ import 'package:vignesh_project_01/features/chat/presentation/widgets/chat_view_
 import 'package:vignesh_project_01/l10n/app_localizations.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/app_scaffold.dart';
 import 'package:vignesh_project_01/shared/presentation/widgets/app_sync_banner.dart';
+import 'package:vignesh_project_01/features/chat/domain/entities/participant_entity.dart';
 
 class ChatView extends StatefulWidget {
   static const String route = '/chat_view';
-  const ChatView({super.key, required this.chatId});
+  const ChatView({super.key, required this.chatId, this.participant});
 
   final String? chatId;
+  final ParticipantEntity? participant;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -79,10 +81,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      appBar: const ChatViewAppBar(
-        name: 'Jake Doe',
-        lastSeen: 'Last seen on 12:00 PM',
-      ),
+      appBar: ChatViewAppBar(name: widget.participant?.displayName ?? ''),
       banner: BlocBuilder<ChatDetailCubit, ChatDetailState>(
         builder: (context, state) => AppSyncBanner(
           visible:

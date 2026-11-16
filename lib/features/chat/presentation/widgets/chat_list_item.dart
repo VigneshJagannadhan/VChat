@@ -44,7 +44,10 @@ class ChatListItem extends StatelessWidget {
       onTap: () => NavigationHelper.pushNamed(
         context: context,
         route: ChatView.route,
-        arguments: ChatDetailViewArgs(chatId: chat.id),
+        arguments: ChatDetailViewArgs(
+          chatId: chat.id,
+          participant: chat.participant,
+        ),
       ),
     );
   }
